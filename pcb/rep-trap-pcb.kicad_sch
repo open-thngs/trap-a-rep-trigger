@@ -1,0 +1,52 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid b363dc8f-4a45-4779-a397-ccb82393dab8)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (rectangle (start 124.46 105.41) (end 158.75 130.81)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (uuid 62088a60-2ff1-4ff6-a339-cc269440ba49)
+  )
+  (rectangle (start 181.61 69.85) (end 215.9 95.25)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (uuid 62665735-c775-4ce9-8245-7518ddb5c010)
+  )
+  (rectangle (start 128.27 49.53) (end 162.56 74.93)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (uuid 97e165ad-53d5-43c9-9940-d0428ce8ae9e)
+  )
+  (rectangle (start 59.69 48.26) (end 93.98 73.66)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (uuid 9c7c51a4-868b-4ddd-a6d1-d49e11e03122)
+  )
+
+  (text "Power Supply and \nBattery Charging" (at 132.08 120.65 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 3afbfb61-02b3-47a8-8e6c-c7c403e82bc5)
+  )
+  (text "ToF Sensor Array" (at 68.58 62.23 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid a5a9c6f0-40cb-455d-a724-6e08078ee35a)
+  )
+  (text "Trigger output" (at 191.77 83.82 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid df5039b8-a6da-4bd7-8016-0ce139a9065a)
+  )
+  (text "MCU" (at 143.51 63.5 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid e1366ce8-bb4e-49d0-8237-e1bd28d4d0d6)
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)
