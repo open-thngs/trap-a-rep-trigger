@@ -1,0 +1,6 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "VL53L4CD")(type "KiCad")(uri "${KIPRJMOD}/components/VL53L4CD/footprints.pretty")(options "")(descr ""))
+  (lib (name "USB4105-GF-A")(type "KiCad")(uri "${KIPRJMOD}/components/USB4105-GF-A")(options "")(descr ""))
+  (lib (name "SJ-3541AS-SMT-TR-67")(type "KiCad")(uri "${KIPRJMOD}/components/SJ-3541AS-SMT-TR-67")(options "")(descr ""))
+)

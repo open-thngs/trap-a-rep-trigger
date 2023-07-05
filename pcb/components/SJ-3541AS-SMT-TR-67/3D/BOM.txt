@@ -1,0 +1,3 @@
+3DX_CUI_DEVICES_Supplier: CUI Devices
+3DX_CUI_DEVICES_Description: 3.5 mm, Stereo, Right Angle, Surface Mount (SMT), 4 Conductors, 0 Internal Switches, Audio Jack Connector, IP67
+3DX_CUI_DEVICES_Model Number: SJ-3541AS-SMT-TR-67

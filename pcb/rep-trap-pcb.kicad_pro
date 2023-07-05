@@ -232,7 +232,7 @@
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "warning",
+      "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
       "simulation_model_issue": "error",
@@ -326,6 +326,18 @@
     [
       "b363dc8f-4a45-4779-a397-ccb82393dab8",
       ""
+    ],
+    [
+      "180e5289-03bd-472e-8d0e-390dcdd20d71",
+      "ToF Array"
+    ],
+    [
+      "92e29135-3982-409e-8df5-7066e8d446c5",
+      "MCU"
+    ],
+    [
+      "5f2b7621-33d9-4fe8-bcd4-78e2ba1f79f4",
+      "PSU and charging"
     ]
   ],
   "text_variables": {}
