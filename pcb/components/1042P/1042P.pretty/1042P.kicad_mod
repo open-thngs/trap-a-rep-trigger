@@ -31,7 +31,7 @@
   (pad "2" smd rect (at 39.4208 0) (size 7.46 6.47) (layers "F.Cu" "F.Paste" "F.Mask")
     (thermal_bridge_angle 45) (tstamp 74528221-76cb-4dd1-b8fe-afd8d3a1f5f9))
   (model "${KIPRJMOD}/components/1042P/1042P.stp"
-    (offset (xyz -0.25 0 0))
+    (offset (xyz -0.25 0.3 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 90))
   )
