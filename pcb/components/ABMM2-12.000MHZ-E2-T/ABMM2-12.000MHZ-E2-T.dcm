@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ABMM2-12.000MHZ-E2-T
+D 12 MHz XO (Standard) CMOS Oscillator 1.8V Enable/Disable 4-SMD, No Lead
+K
+F https://abracon.com/Resonators/ABMM2.pdf
+$ENDCMP
+#
+#End Doc Library

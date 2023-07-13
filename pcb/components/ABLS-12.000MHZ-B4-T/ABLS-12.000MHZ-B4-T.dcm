@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ABLS-12.000MHZ-B4-T
+D ABRACON - ABLS-12.000MHZ-B4-T - CRYSTAL, 12MHZ, 18PF, HC-49US
+K
+F https://abracon.com/Resonators/abls.pdf
+$ENDCMP
+#
+#End Doc Library

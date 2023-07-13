@@ -1,0 +1,27 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#SamacSys ECAD Model ABLS-12.000MHZ-B4-T
+#/549537/1102845/2.50/2/2/Crystal or Oscillator
+DEF ABLS-12.000MHZ-B4-T Y 0 30 Y Y 1 F N
+F0 "Y" 350 250 50 H V L CNN
+F1 "ABLS-12.000MHZ-B4-T" 350 150 50 H V L CNN
+F2 "ABLS" 350 50 50 H I L CNN
+F3 "https://abracon.com/Resonators/abls.pdf" 350 -50 50 H I L CNN
+F4 "ABRACON - ABLS-12.000MHZ-B4-T - CRYSTAL, 12MHZ, 18PF, HC-49US" 350 -150 50 H I L CNN "Description"
+F5 "" 350 -250 50 H I L CNN "Height"
+F6 "815-ABLS-12.0M-T" 350 -350 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/ABRACON/ABLS-12.000MHZ-B4-T?qs=yTU0IcKoRlGSQ8ooxPPVnQ%3D%3D" 350 -450 50 H I L CNN "Mouser Price/Stock"
+F8 "ABRACON" 350 -550 50 H I L CNN "Manufacturer_Name"
+F9 "ABLS-12.000MHZ-B4-T" 350 -650 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X ~ 1 0 0 100 R 50 50 0 0 P
+X ~ 2 400 0 100 L 50 50 0 0 P
+P 2 0 1 6 120 100 120 -100 N
+P 2 0 1 6 280 100 280 -100 N
+P 5 0 1 6 160 140 160 -140 240 -140 240 140 160 140 N
+P 2 0 1 6 280 0 300 0 N
+P 2 0 1 6 120 0 100 0 N
+ENDDRAW
+ENDDEF
+#
+#End Library

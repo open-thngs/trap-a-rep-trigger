@@ -1,0 +1,39 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#(c) SnapEDA 2016 (snapeda.com)
+#This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0
+#
+# SJ2-25773B-SMT-TR
+#
+DEF SJ2-25773B-SMT-TR J 0 40 Y N 1 L N
+F0 "J" -401 321 50 H V L BNN
+F1 "SJ2-25773B-SMT-TR" -401 -476 50 H V L BNN
+F2 "CUI_SJ2-25773B-SMT-TR" 0 0 50 H I L BNN
+F3 "" 0 0 50 H I L BNN
+F4 "1.01" 0 0 50 H I L BNN "PARTREV"
+F5 "Manufacturer Recommendation" 0 0 50 H I L BNN "STANDARD"
+F6 "CUI Inc" 0 0 50 H I L BNN "MANUFACTURER"
+DRAW
+P 2 0 0 10 -300 200 -250 150 N
+P 2 0 0 10 -250 150 -200 200 N
+P 2 0 0 10 -100 0 400 0 N
+P 2 0 0 10 -100 -300 -50 -250 N
+P 2 0 0 10 -50 -250 0 -300 N
+P 2 0 0 10 0 -300 40 -300 N
+P 2 0 0 10 40 -300 400 -300 N
+P 2 0 0 10 -200 0 -150 50 N
+P 2 0 0 10 -150 50 -100 0 N
+P 2 0 0 10 400 -200 40 -200 N
+P 2 0 0 10 40 -200 40 -300 N
+P 2 0 0 10 40 -300 20 -250 N
+P 2 0 0 10 40 -300 60 -250 N
+P 2 0 0 10 400 200 -200 200 N
+S -400 -400 400 300 0 0 10 f
+X ~ 2 600 -300 200 L 40 40 0 0 P 
+X ~ 4 600 200 200 L 40 40 0 0 P 
+X ~ 3 600 0 200 L 40 40 0 0 P 
+X ~ 10 600 -200 200 L 40 40 0 0 P 
+ENDDRAW
+ENDDEF
+#
+# End Library
