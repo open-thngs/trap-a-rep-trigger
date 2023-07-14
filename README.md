@@ -1,64 +1,7 @@
-[![kibot](https://github.com/nerdyscout/KiCAD-CICD-Template/actions/workflows/kibot.yml/badge.svg)](https://github.com/nerdyscout/KiBot-CICD-Template/actions/workflows/kibot.yml)
-[![platformio](https://github.com/nerdyscout/KiCAD-CICD-Template/actions/workflows/platformio.yml/badge.svg)](https://github.com/nerdyscout/KiBot-CICD-Template/actions/workflows/platformio.yml)
-[![reuse](https://github.com/nerdyscout/KiCAD-CICD-Template/actions/workflows/reuse.yml/badge.svg)](https://github.com/nerdyscout/KiBot-CICD-Template/actions/workflows/reuse.yml)
+# Rep Trap 
 
----
+The Rep Trap idea is a hardware system designed to overcome the limitations and challenges of conventional trapping methods. Inspired by PIR sensors commonly used in wildlife cameras, the hardware system features a gate-like sensor arrangement, specifically designed for animals to pass through. Positioned with its sensor element facing downwards, the system incorporates a distance measurement unit within the sensor. This unit continuously measures the height below the sensor, detecting any changes in height.
 
-# KiCAD-CICD-Template
-
-This repository provides different CI/CD workflows used for projects using [KiCAD](https://www.kicad.org/) and [PlatformIO](https://platformio.org).
-
-## workflows
-
-### KiBot
-
-[KiBot](https://github.com/INTI-CMNB/KiBot/) is used to generate all kind of documentation from a KiCAD6 project.
-
-Whenever a file matching `pcb/*.kicad_*` changes this workflow will trigger.
-
-The following documents are generated on every build:
-
-```
-- pcb/cad/
-   - dxf/
-      - AutoCAD - DXF
-   - boardview - BRD
-   - 3D render - STEP
-- pcb/docs/
-   - bom/
-      - Interactive BOM - HTML
-      - Octopart list - CSV
-      - KiCost - XLSX (disabled)
-   - schematic - PDF
-- pcb/img/
-   - pcb/$fab/$style/
-      - PCB top - SVG
-      - PCB bottom - SVG
-   - render/ (disabled)
-      - PCB render - PNG
-   - schematic - SVG
-- pcb/gerbers - ZIP
-```
-
-### PlatformIO
-
-used to rebuild your source code whenever it changes.
-
-### REUSE
-
-used to insure every file got a propper license. 
-
-## getting started
-
-- [ ] hit the "use this template" button and give your project a name
-- [ ] clone this new repository localy
-- [ ] replace content of README.md
-- [ ] Code
-   - [ ] put your code in the `src/` folder using platformio
-- [ ] PCB
-   - [ ] change the filenames in `pcb/*.kicad_*` matching your repository name
-   - [ ] create your PCB
-- [ ] run `reuse --lint`
-   - [ ] make sure the licenses of `pcb/*` fits your needs
-   - [ ] make sure the licenses of `src/*`, `include/*`, `lib/*`, `test/*` fits your needs
-- [ ] commit and push all those changes regulary to your project
+![rep-trap-pcb-3D_blender_30deg](https://github.com/open-thngs/trap-a-rep-trigger/assets/1415713/9c88f809-4b2b-452e-a898-5deda9819f62)
+![rep-trap-pcb-3D_blender_top](https://github.com/open-thngs/trap-a-rep-trigger/assets/1415713/5fd9419d-a3f0-4ae2-8ee5-6e31db8dc7e9)
+![rep-trap-pcb-3D_blender_bottom](https://github.com/open-thngs/trap-a-rep-trigger/assets/1415713/0d7e8466-224f-44df-9ad4-e85fe32772ca)
