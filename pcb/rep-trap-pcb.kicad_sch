@@ -222,7 +222,7 @@
     (effects (font (size 2 2)) (justify left bottom))
     (uuid 3f7faf73-a109-4b19-979f-bdd2c2c2389a)
   )
-  (text "MCU" (at 104.14 95.25 0)
+  (text "MCU" (at 104.14 107.95 0)
     (effects (font (size 2 2)) (justify left bottom))
     (uuid 5cca9c5b-fb84-4cd3-af90-1eb2168a3b6d)
   )
