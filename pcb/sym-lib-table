@@ -8,4 +8,5 @@
   (lib (name "1042P")(type "KiCad")(uri "${KIPRJMOD}/components/1042P/1042P.kicad_sym")(options "")(descr ""))
   (lib (name "ABLS-12_000MHZ-B4-T")(type "KiCad")(uri "${KIPRJMOD}/components/ABLS-12.000MHZ-B4-T/ABLS-12_000MHZ-B4-T.kicad_sym")(options "")(descr ""))
   (lib (name "rp2040")(type "Legacy")(uri "${KIPRJMOD}/components/RP2040/rp2040.lib")(options "")(descr ""))
+  (lib (name "450405020524")(type "KiCad")(uri "${KIPRJMOD}/components/450405020524/450405020524.kicad_sym")(options "")(descr ""))
 )

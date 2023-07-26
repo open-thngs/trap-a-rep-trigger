@@ -9,4 +9,5 @@
   (lib (name "rp2040")(type "KiCad")(uri "${KIPRJMOD}/components/RP2040/rp2040.pretty")(options "")(descr ""))
   (lib (name "ABMM2-12.000MHZ-E2-T")(type "KiCad")(uri "${KIPRJMOD}/components/ABMM2-12.000MHZ-E2-T")(options "")(descr ""))
   (lib (name "SO-8_3.9x4.9mm_P1.27mm")(type "KiCad")(uri "${KIPRJMOD}/components/SO-8_3.9x4.9mm_P1.27mm.pretty")(options "")(descr ""))
+  (lib (name "450405020524")(type "KiCad")(uri "${KIPRJMOD}/components/450405020524/450405020524.pretty")(options "")(descr ""))
 )
