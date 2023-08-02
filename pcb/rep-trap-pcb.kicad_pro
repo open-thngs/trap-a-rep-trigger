@@ -56,12 +56,7 @@
         }
       ],
       "drc_exclusions": [
-        "hole_clearance|75935000|87647000|6c8a2406-e472-4aa7-a8b4-7b258c838881|7d4531a5-0f94-4f0c-8060-036a4880d79b",
-        "hole_clearance|75935000|87847000|6c8a2406-e472-4aa7-a8b4-7b258c838881|a952c65a-e7bb-450d-b6da-23d4b765319c",
-        "hole_clearance|75935000|93247000|42022894-8819-44d3-bb72-342ea5b1e510|2cc76f81-f97f-4f20-8b00-8f81f30cfaa2",
-        "hole_clearance|75935000|93447000|42022894-8819-44d3-bb72-342ea5b1e510|fd932dde-4444-40a8-97f0-0c14d54f515e",
         "lib_footprint_issues|150418800|97688400|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000",
-        "lib_footprint_mismatch|73981000|91878125|1a495046-c8d2-4c20-b3a9-c5f2abf25402|00000000-0000-0000-0000-000000000000",
         "missing_courtyard|149958650|97687859|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000"
       ],
       "meta": {
@@ -122,7 +117,7 @@
         "min_clearance": 0.0,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.0,
-        "min_hole_clearance": 0.25,
+        "min_hole_clearance": 0.127,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
@@ -409,7 +404,7 @@
       "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
-      "simulation_model_issue": "error",
+      "simulation_model_issue": "ignore",
       "unannotated": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
