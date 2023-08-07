@@ -2,7 +2,7 @@ kibot:
   version: 1
   
 outputs:
-  - name: 'blender 3d view rear'
+  - name: 'Blender 3D Image'
     type: 'blender_export'
     dir: 'Generated/render'
     options:
@@ -17,3 +17,24 @@ outputs:
         transparent_background: true
       outputs:
         type: render
+
+  - name: 'Gerber Files'
+    type: 'gerber'
+    dir: 'Generated/gerbers'
+
+  - name: 'iBOM'
+    type: 'ibom'
+    dir: 'Generated/ibom'
+
+  - name: 'Schematics'
+    type: 'pdf_sch_print'
+    dir: 'Generated/schematics'
+
+  - name: 'Pick and Place'
+    type: 'position'
+    dir: 'Generated/position'
+
+  - name: '3D STEP'
+    type: 'step'
+    dir: 'Generated/3D'
+      
