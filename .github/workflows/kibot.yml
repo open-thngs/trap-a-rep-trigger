@@ -3,42 +3,26 @@
 # SPDX-License-Identifier: CC0-1.0
 
 name: "KiBot CI"
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
-on:
-  push:
-    paths:
-      - '**/*.kicad_sch'
-      - '**/*.kicad_pcb'
-      - '**/*kibot.yml'
-  pull_request:
-    paths:
-      - '**/*.kicad_sch'
-      - '**/*.kicad_pcb'
-      - '**/*kibot.yml'
-  repository_dispatch:
-    types: [run_qs_gha]
+on: [push, pull_request] 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   quick:
     name: "Quick Start (action)"
     runs-on: ubuntu-latest
+    container: ghcr.io/inti-cmnb/kicad7_auto_full:latest
 
     steps:
-    - name: Get repo
+    - name: Checkout repo
       uses: actions/checkout@v3
       with:
         # So we can run a diff between last 2 changes
         fetch-depth: '0'
 
     - name: Run KiBot
-      # v2_k6 for v1.5.1 has a permission problem
-      uses: INTI-CMNB/KiBot@v2_k7
-      with:
-        quickstart: YES
-
+      run: |
+        kibot -b "pcb/rep-trap-pcb.kicad_pcb"
+      
     - name: Upload results
       uses: actions/upload-artifact@v3
       with:
