@@ -21,6 +21,7 @@ outputs:
   - name: 'Gerber Files'
     type: 'gerber'
     dir: 'Generated/gerbers'
+    layers: [copper]
 
   - name: 'iBOM'
     type: 'ibom'
