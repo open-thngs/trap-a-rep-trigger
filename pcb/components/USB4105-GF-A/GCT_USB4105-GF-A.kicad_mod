@@ -1,7 +1,7 @@
 (footprint "GCT_USB4105-GF-A" (version 20221018) (generator pcbnew)
   (layer "F.Cu")
   (clearance 0.1)
-  (attr through_hole)
+  (attr smd)
   (fp_text reference "REF**" (at -1.825 -8.135) (layer "F.SilkS")
       (effects (font (size 1 1) (thickness 0.015)))
     (tstamp b3be737c-0669-4075-8a3a-22235ca4d424)
