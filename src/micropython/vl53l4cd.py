@@ -15,20 +15,27 @@ class VL53L4CD:
     sensor_type = None
     i2caddr = None
 
-    def __init__(self, i2c, xshut_pin, interrupt_pin, interrupt_handler, i2caddr=41, interrupt_enalbed=True) -> None:
+    def __init__(self, i2c, xshut_pin, interrupt_pin, i2caddr=41) -> None:
         self.driver = vl53l4cd_driver.VL53L4CD_DRIVER(i2c)
         self.xshut_pin = Pin(xshut_pin, Pin.OUT)
-        if interrupt_enalbed:
-            self.interrupt_pin = Pin(interrupt_pin, Pin.IN, Pin.PULL_UP)
-            self.interrupt_pin.irq(trigger=Pin.IRQ_FALLING, handler=interrupt_handler)
+        self.xshut_pin.off()
+        self.interrupt_pin = Pin(interrupt_pin, Pin.IN, Pin.PULL_UP)
         self.i2caddr = i2caddr
-        if i2caddr != 41:
+
+    def begin(self):
+        if self.i2caddr != 41:
             self.xshut_pin.on()
             time.sleep(0.01)
-            self.driver.set_i2c_address(i2caddr)
+            self.driver.set_i2c_address(self.i2caddr)
 
-    def enable_interrupt(self, threshold_mm:int, trigger_only_below_threshold):
+    def set_interrupt(self, threshold_mm:int, trigger_only_below_threshold):
         self.driver.set_interrupt_configuration(threshold_mm, trigger_only_below_threshold)
+        
+    def enable_interrupt(self, interrupt_handler):
+        self.interrupt_pin.irq(trigger=Pin.IRQ_FALLING, handler=interrupt_handler)
+
+    def disable_interrupt(self):
+        self.interrupt_pin.irq(trigger=Pin.IRQ_FALLING, handler=None)
 
     def get_sensor_model_id_and_type(self) -> tuple:
         if (not self.sensor_id or not self.sensor_type):

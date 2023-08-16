@@ -1,0 +1,3 @@
+mpremote connect COM10 cp micropython/app.py :/app.py
+mpremote connect COM10 reset
+mpremote connect COM10 repl
