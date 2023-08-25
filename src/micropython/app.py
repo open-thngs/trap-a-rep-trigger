@@ -1,25 +1,55 @@
 from machine import I2C, Pin
+import machine
 import micropython
+from micropython import const
 import time
 import vl53l4cd
-import _vl53l4cd as sensor
 import uasyncio
 import statistics
+import lowpower
 
-print ("Start...")
+TEMPERATURE_CONVERSION_FACTOR = 3.3 / (65535)
+TEMPERATURE_OFFSET = const(0.706)
 
+TIME_TO_MEASURE = const(100)
+MEASURE_FREQUENCY = const(150)
+
+VL53_ADDR_1 = const(42)
+VL53_XSHUNT_1 = const(0)     
+VL53_INT_1 = const(1)
+
+VL53_ADDR_2 = const(43)
+VL53_XSHUNT_2 = const(2)     
+VL53_INT_2 = const(3)
+
+VL53_ADDR_3 = const(44)
+VL53_XSHUNT_3 = const(4)     
+VL53_INT_3 = const(5)
+
+VL53_ADDR_4 = const(45)
+VL53_XSHUNT_4 = const(25)    
+VL53_INT_4 = const(24)
+
+# start_delay = 5
+# for i in range(start_delay):
+#     print("Start in {}s".format(start_delay-i))
+#     time.sleep(1)
+# print ("Starting...")
+
+debugging = False
 scheduler = micropython.schedule
 
 shutter = Pin(29, Pin.OUT, Pin.PULL_DOWN)
 focus = Pin(28, Pin.OUT, Pin.PULL_DOWN)
 led = Pin(13, Pin.OUT)
+temperature_pin = machine.ADC(4)
 
-i2c0 = I2C(1, sda=Pin(10), scl=Pin(11))
-##########################(i2c | shunt | int | address)
-vl53_1 = vl53l4cd.VL53L4CD(i2c0,    0,     1,  42)
-vl53_2 = vl53l4cd.VL53L4CD(i2c0,    2,     3,  43)
-vl53_3 = vl53l4cd.VL53L4CD(i2c0,    4,     5,  44)
-vl53_4 = vl53l4cd.VL53L4CD(i2c0,    25,    24, 45)
+i2c = I2C(1, sda=Pin(10), scl=Pin(11))
+# i2c0 = SoftI2C(sda=Pin(10), scl=Pin(11), freq=1000000)
+vl53_1 = vl53l4cd.VL53L4CD(i2c, VL53_XSHUNT_1, VL53_INT_1, VL53_ADDR_1, debug=debugging)
+vl53_2 = vl53l4cd.VL53L4CD(i2c, VL53_XSHUNT_2, VL53_INT_2, VL53_ADDR_2, debug=debugging)
+vl53_3 = vl53l4cd.VL53L4CD(i2c, VL53_XSHUNT_3, VL53_INT_3, VL53_ADDR_3, debug=debugging)
+vl53_4 = vl53l4cd.VL53L4CD(i2c, VL53_XSHUNT_4, VL53_INT_4, VL53_ADDR_4, debug=debugging)
 
 # Globale Variable, die den aktuellen Status des Events speichert
 global event_in_progress
@@ -28,7 +58,7 @@ event_in_progress = False
 global is_initial_irq
 is_initial_irq = True
 
-def event_handler(arg):
+def event_handler(args):
     global event_in_progress
 
     print("Start Event")
@@ -39,43 +69,18 @@ def event_handler(arg):
     time.sleep(0.5)
     focus.off()
     shutter.off()
-    time.sleep(3)
+    time.sleep(1.5)
     led.off()
 
     print("Camera Triggered")
     event_in_progress = False
 
-def calibrate_sensor_height(sensor:vl53l4cd.VL53L4CD, intensitiy) -> int:
-    sensor.sensor_init(vl53l4cd.Mode.DEFAULT)
-    sensor.set_measure_timings(100, 200)
-    sensor.start_ranging()
-    heights = []
-    print("Start calibration")
-    for x in range(intensitiy):
-        while not sensor.is_data_ready():
-            time.sleep(0.01)
-        
-        distance = sensor.get_distance()
-        print("distance: {}mm".format(distance))
-        heights.append(distance)
-        time.sleep(0.1)
-
-    mean_distance = statistics.mean(heights)
-    std_deviation = statistics.stdev(heights)
-
-    threshold = mean_distance - 5 * std_deviation
-
-    print("Durchschnitt:", mean_distance)
-    print("Standardabweichung:", std_deviation)
-    print("Schwellenwert:", int(threshold))
-    return int(threshold)
-
 def interrupt_handler(pin):
     print("IQR on pin {}".format(pin))
     global event_in_progress
     
-    # if pin is vl53_1.interrupt_pin:
-    #     vl53_1.clear_interrupt()
+    if pin is vl53_1.interrupt_pin:
+        vl53_1.clear_interrupt()
     if pin is vl53_2.interrupt_pin:
         vl53_2.clear_interrupt()
     elif pin is vl53_3.interrupt_pin:
@@ -88,19 +93,42 @@ def interrupt_handler(pin):
         return
     if not event_in_progress:
         event_in_progress = True
+        print("Scheduling event...")
         micropython.schedule(event_handler, None)
-    #print("vl53_4 detection Distance: {} mm".format(vl53_4.get_distance()))
+    print("IQR on pin {} ended!".format(pin))
 
-sensor_array = [ vl53_2, vl53_3, vl53_4]
-print(i2c0.scan())
+def get_temperature():
+    temps = []
+    for i in range(25):
+        reading = temperature_pin.read_u16() * TEMPERATURE_CONVERSION_FACTOR 
+        temperature = 27 - (reading - TEMPERATURE_OFFSET)/0.001721
+        print("{}C".format(temperature))
+        temps.append(temperature)
+        time.sleep(0.1)
+
+    avg_temp = statistics.mean(temps)
+    print("Average temperature: {}C".format(avg_temp))
+
+# get_temperature()
+
+sensor_array = [vl53_1, vl53_2, vl53_3, vl53_4]
+print(i2c.scan())
 
 for sensor in sensor_array:
     sensor.begin()
-    threashold_mm = calibrate_sensor_height(sensor, 25)
+    # sensor.dump_debug_data()
+    sensor.start_temperature_update()
+    threashold_mm = sensor.get_height_trigger_threashold()
     sensor.sensor_init(vl53l4cd.Mode.LOW_POWER)
+    sensor.set_measure_timings(TIME_TO_MEASURE, MEASURE_FREQUENCY)
     sensor.set_interrupt(threashold_mm, True)
     sensor.enable_interrupt(interrupt_handler)
-    sensor.set_measure_timings(100, 200)
     sensor.start_ranging()
 
+time.sleep(0.1)
 is_initial_irq = False
+
+# while True:
+#     print("Sleeping...")
+#     machine.lightsleep(10000)
+    
