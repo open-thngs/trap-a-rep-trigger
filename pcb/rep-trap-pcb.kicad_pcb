@@ -5787,7 +5787,7 @@
   (gr_text "SWD" (at 209.423 99.441) (layer "F.SilkS") (tstamp d7543f56-e254-4e32-9576-e67941eb9e75)
     (effects (font (size 0.6 0.6) (thickness 0.15)) (justify left bottom))
   )
-  (gr_text "- all connectors on one side (USB, Klinke)\n- exchange 18650 Battery Holder crap\n- apply heatsink guidelines to charger IC\n- number sensors " (at 111.887 125.603) (layer "Dwgs.User") (tstamp 0ca3dc7d-aed7-408b-be0f-b63174b54050)
+  (gr_text "- all connectors on one side (USB, Klinke)\n- exchange 18650 Battery Holder crap\n- apply heatsink guidelines to charger IC\n- number sensors \n- add more testpoint (3v3)" (at 106.68 129.413) (layer "Dwgs.User") (tstamp 0ca3dc7d-aed7-408b-be0f-b63174b54050)
     (effects (font (size 3 3) (thickness 0.3) bold) (justify left bottom))
   )
   (dimension (type aligned) (layer "F.Cu") (tstamp 9bab9142-e876-44c4-9417-e724b5463e1f)
