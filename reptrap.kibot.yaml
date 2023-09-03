@@ -71,11 +71,6 @@ outputs:
     options:
       format: 'png'
       show_components: 'all'
-      style:
-        board: '#ffffff'
-        copper: '#d39751'
-        pads: '#d39751'
-        silk: '#6d6d6d'
 
   - name: 'PCB Print Bottom'
     type: 'pcbdraw'
@@ -85,9 +80,4 @@ outputs:
       show_components: 'all'
       bottom: true
       output: '%f-%i%I%v-bottom.%x'
-      style:
-        board: '#ffffff'
-        copper: '#d39751'
-        pads: '#d39751'
-        silk: '#6d6d6d'
       
