@@ -65,14 +65,14 @@ outputs:
     type: 'step'
     dir: 'Generated/3D'
 
-  - name: 'PCB Print'
+  - name: 'PCB Print Top'
     type: 'pcbdraw'
     dir: 'Generated/print'
     options:
       format: 'png'
       show_components: 'all'
 
-  - name: 'PCB Print'
+  - name: 'PCB Print Bottom'
     type: 'pcbdraw'
     dir: 'Generated/print'
     options:
