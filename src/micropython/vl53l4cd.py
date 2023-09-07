@@ -17,7 +17,8 @@ class VL53L4CD:
     sensor_type = None
     i2caddr = None
 
-    def __init__(self, i2c, xshut_pin, interrupt_pin, i2caddr=41, debug=False) -> None:
+    def __init__(self, i2c, name, xshut_pin, interrupt_pin, i2caddr=41, debug=False) -> None:
+        self.name = name
         self.driver = vl53l4cd_driver.VL53L4CD_DRIVER(i2c, debug)
         self.xshut_pin = Pin(xshut_pin, Pin.OUT)
         self.xshut_pin.off()
@@ -133,6 +134,18 @@ class VL53L4CD:
     
     def clear_interrupt(self):
         self.driver.clear_interrupt()
+
+    def get_signal_threshold(self):
+        return self.driver.get_signal_threshold()
+    
+    def set_signal_threshold(self, signal_threshold):
+        return self.driver.set_signal_threshold(signal_threshold)
+    
+    def get_sigma_threshold(self):
+        return self.driver.get_sigma_threshold()
+    
+    def set_sigma_threshold(self, sigma_threshold):
+        return self.driver.set_sigma_threshold(sigma_threshold)
     
     def _start_vhv(self):
         self.driver.write(0x0087, b'\x40')
@@ -159,6 +172,52 @@ class VL53L4CD:
         self.driver.set_macrop_loop_bound(b'\x09')
         self.driver.write(0x0B, b'\x00')
     
+    def device_heat_loop(self):
+        # print("Running Device heat loop (10 samples)")
+        self.driver.start_ranging()
+        for x in range(10): # Device heat loop (10 samples)
+            while not self.driver.is_data_ready():
+                time.sleep(0.001)
+            
+            self.driver.get_distance()
+            self.driver.clear_interrupt()
+        self.stop_ranging()
+
+    def dump_debug_data(self):
+        self.driver.dump_debug_data()
+
+    def get_height_trigger_threashold(self, intensitiy=25, factor=5) -> int:
+        self.sensor_init(Mode.DEFAULT)
+
+        heights = []
+        print("Start calibration..")
+        self.device_heat_loop()
+
+        self.start_ranging()
+        for x in range(intensitiy):
+            while not self.is_data_ready():
+                time.sleep(0.001)
+
+            distance = self.get_distance()
+            heights.append(distance)
+            # print("distance: {}mm".format(distance))
+            self.clear_interrupt()
+            
+        self.stop_ranging()
+
+        mean_distance = statistics.mean(heights)
+        std_deviation = statistics.stdev(heights)
+
+        threshold = mean_distance - factor * std_deviation
+        if threshold > 1300:
+            threshold = 1300
+
+        print("Average:", mean_distance)
+        print("std deviation:", std_deviation)
+        print("threshold:", int(threshold))
+
+        return int(threshold)
+    
     def calibrate_offset(self, target_distance_mm, nb_samples):
         if (nb_samples < 5 or nb_samples > 255) or (target_distance_mm < 10 or target_distance_mm > 1000):
             raise RuntimeError("Invalid parameters")
@@ -180,57 +239,93 @@ class VL53L4CD:
             self.driver.stop_ranging()
 
             average = statistics.mean(distances)
+            print("average distance: {}".format(average))
             pre_offset = target_distance_mm - average
-            tmpOff = pre_offset * 4 # who knows why they multiply by 4 mofos!? ¯\_(ツ)_/¯
+            tmpOff = int(pre_offset * 4) # who knows why they multiply by 4 mofos!? ¯\_(ツ)_/¯
             
-            self.driver.set_offset(tmpOff)
+            print("calibrated offset: {}".format(tmpOff))
+            self.set_offset(tmpOff)
+            return tmpOff
+    
+    def set_offset(self, offset):
+        self.driver.set_offset(offset)
 
-    def device_heat_loop(self):
-        print("Running Device heat loop (10 samples)")
-        self.driver.start_ranging()
-        for x in range(10): # Device heat loop (10 samples)
+    def calibrate_xtalk(self, target_distance_mm, nb_samples):
+        if(((nb_samples < 5) or (nb_samples > 255)) or ((target_distance_mm < 10) or (target_distance_mm > 5000))):
+            raise RuntimeError("Invalid parameters")
+
+        #/* Disable Xtalk compensation */
+        self.driver.set_cross_talk(0)
+
+        #/* Device heat loop (10 samples) */
+        self.device_heat_loop()
+
+        result:Result = Result()
+        average_distance = 0
+        average_spad_nb = 0
+        average_signal = 0
+        counter_nb_samples = 0
+        self.start_ranging()
+        for x in range(nb_samples):
             while not self.driver.is_data_ready():
                 time.sleep(0.001)
             
-            self.driver.get_distance()
+            result = self.get_result()
             self.driver.clear_interrupt()
-        self.stop_ranging()
 
-    def dump_debug_data(self):
-        self.driver.dump_debug_data()
-
-    def get_height_trigger_threashold(self, intensitiy=25) -> int:
-        self.sensor_init(Mode.DEFAULT)
-
-        heights = []
-        print("Start calibration..")
-        self.device_heat_loop()
-
-        self.start_ranging()
-        for x in range(intensitiy):
-            # led.off()
-            while not self.is_data_ready():
-                time.sleep(0.001)
-
-            # led.on()
-            distance = self.get_distance()
-            heights.append(distance)
-            print("distance: {}mm".format(distance))
-            self.clear_interrupt()
+            # print("result.range_status: {} x: {}".format(result.range_status, x))
+            if(result.range_status == 0 and x > 0):
+                #/* Discard invalid measurements and first frame */
+                average_distance += result.distance_mm
+                average_spad_nb += result.number_of_spad
+                average_signal += result.signal_rate_kcps
+                counter_nb_samples += 1
+                # print("counter_nb_samples: {}".format(counter_nb_samples))
             
         self.stop_ranging()
 
-        # led.off()
-        mean_distance = statistics.mean(heights)
-        std_deviation = statistics.stdev(heights)
+        if(counter_nb_samples == 0):
+            raise RuntimeError("No valid data samples")
 
-        threshold = mean_distance - 5 * std_deviation
-        if threshold > 1300:
-            threshold = 1300
+        average_distance /= counter_nb_samples
+        average_spad_nb /= counter_nb_samples
+        average_signal /= counter_nb_samples
 
-        print("Average:", mean_distance)
-        print("std deviation:", std_deviation)
-        print("threshold:", int(threshold))
+        xtalk_kcps = 1.0 - (average_distance / target_distance_mm)
+        xtalk_kcps *= average_signal / average_spad_nb
+        xtalk_kcps = int(xtalk_kcps)
+        print("xtalk: {}".format(xtalk_kcps))
 
-        return int(threshold)
+        #/* 127kcps is the max Xtalk value (65536/512) */
+        if(xtalk_kcps > 127):
+            raise RuntimeError("Xtalk compensation failed")
+        
+        self.set_xtalk(xtalk_kcps)
+        return xtalk_kcps
+    
+    def set_xtalk(self, xtalk):
+        self.driver.set_cross_talk(xtalk)
+
+    def get_result(self):
+        result:Result = Result()
+        result.range_status = self.driver.get_result_range_status()
+        result.number_of_spad = self.driver.get_result_spad_nb()
+        result.signal_rate_kcps = self.driver.get_result_signal_rate()
+        result.ambient_rate_kcps = self.driver.get_result_ambient_rate()
+        result.sigma_mm = self.driver.get_result_sigma()
+        result.distance_mm = self.driver.get_result_distance()
+        result.signal_per_spad_kcps = result.signal_rate_kcps / result.number_of_spad
+        result.ambient_per_spad_kcps = result.ambient_rate_kcps / result.number_of_spad
+
+        return result
+
+class Result:
+    range_status = 0
+    number_of_spad = 0
+    signal_rate_kcps = 0
+    ambient_rate_kcps = 0
+    sigma_mm = 0
+    distance_mm = 0
+    signal_per_spad_kcps = 0
+    ambient_per_spad_kcps = 0
         

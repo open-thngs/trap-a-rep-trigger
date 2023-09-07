@@ -11,6 +11,10 @@ struct.unpack(...)
 
 class VL53L4CD_DRIVER:
 
+    status_rtn = [ 255, 255, 255, 5, 2, 4, 1, 7, 3,
+                0, 255, 255, 9, 13, 255, 255, 255, 255, 10, 6,
+                255, 255, 11, 12 ]
+
     def __init__(self, i2c, debug=False):
         self.i2c_address = 41
         self._i2c = i2c
@@ -47,10 +51,10 @@ class VL53L4CD_DRIVER:
         self.debug_print("start_ranging")
         inter_ms = self.get_inter_measurement()
         if (inter_ms == 0):
-            print("continuous mode")
+            self.debug_print("continuous mode")
             self.write(SYSTEM_START, b'\x21')
         else:
-            print("autonomous mode")
+            self.debug_print("autonomous mode")
             self.write(SYSTEM_START, b'\x40')
 
     def start_ranging_single_shot(self):
@@ -212,10 +216,13 @@ class VL53L4CD_DRIVER:
         self.write(INNER_OFFSET_MM, struct.pack(">H", inner_offset_mm))
         self.write(OUTER_OFFSET_MM, struct.pack(">H", outer_offset_mm))
 
+    # def set_cross_talk_manual(self, xtalk_plane_offset_kcps):
+    #     self.write(XTALK_PLANE_OFFSET_KCPS, struct.pack(">H", (xtalk_plane_offset_kcps << 9)))
+    #     self.write(XTALK_X_PLANE_GRADIENT_KCPS, struct.pack(">H", 0x00))
+    #     self.write(XTALK_Y_PLANE_GRADIENT_KCPS, struct.pack(">H", 0x00))
+
     def set_cross_talk(self, xtalk_plane_offset_kcps):
-        self.write(XTALK_PLANE_OFFSET_KCPS, struct.pack(">H", (xtalk_plane_offset_kcps << 9)))
-        self.write(XTALK_X_PLANE_GRADIENT_KCPS, struct.pack(">H", 0x00))
-        self.write(XTALK_Y_PLANE_GRADIENT_KCPS, struct.pack(">H", 0x00))
+        self.write(XTALK_PLANE_OFFSET_KCPS, struct.pack(">H", (xtalk_plane_offset_kcps * 512)))
 
     def get_cross_talk(self):
         xtalk_plane_offset_kcps = struct.unpack(">H", self.read(XTALK_PLANE_OFFSET_KCPS, 2))[0]
@@ -230,36 +237,60 @@ class VL53L4CD_DRIVER:
     def set_sigma_threshold(self, sigma_thresh_mm):
         if(sigma_thresh_mm > 16383):
             raise RuntimeError("Invalid sigma threshold value")
-        else:
-            self.write(RANGE_CONFIG_SIGMA_THRESH, struct.pack(">H", sigma_thresh_mm))
+        
+        self.write(RANGE_CONFIG_SIGMA_THRESH, struct.pack(">H", sigma_thresh_mm << 2))
+    
+    def get_sigma_threshold(self):
+        sigma_mm = int.from_bytes(self.read(RANGE_CONFIG_SIGMA_THRESH, 2), "big")
+        sigma_mm = sigma_mm >> 2
+
+        return sigma_mm
 
     # Signal threshold. This is the quantity of photons measured by the
 	# sensor. A high value means that the accuracy is good. Increasing
 	# this threshold reduces the max ranging distance, but it reduces the
 	# number of false-positives.
     def set_signal_threshold(self, signal_kcps):
-        if((signal_kcps >= 1) and (signal_kcps <= 16384)):
-            self.write(MIN_COUNT_RATE_RTN_LIMIT_MCPS, signal_kcps >> 3)
-        else:
+        if((signal_kcps < 1) or (signal_kcps > 16384)):
             raise RuntimeError("Invalid signal threshold value")
+        
+        self.write(MIN_COUNT_RATE_RTN_LIMIT_MCPS, struct.pack(">H", signal_kcps >> 3))
+
+    def get_signal_threshold(self):
+        signal_kcps = int.from_bytes(self.read(MIN_COUNT_RATE_RTN_LIMIT_MCPS, 2), "big")
+        signal_kcps = signal_kcps << 3
+
+        return signal_kcps
+
+    def get_result_range_status(self):
+        range_status = int.from_bytes(self.read(RESULT_RANGE_STATUS), "big")
+        range_status = range_status & 0x1F
+        if (range_status < 24):
+            return self.status_rtn[range_status]
+        return range_status
+    
+    def get_result_spad_nb(self):
+        return int.from_bytes(self.read(RESULT_SPAD_NB, 2), "big") / 256
+    
+    def get_result_signal_rate(self):
+        return int.from_bytes(self.read(RESULT_SIGNAL_RATE, 2), "big") * 8
+    
+    def get_result_ambient_rate(self):
+        return int.from_bytes(self.read(RESULT_AMBIENT_RATE, 2), "big") * 8
+    
+    def get_result_sigma(self):
+        return int.from_bytes(self.read(RESULT_SIGMA, 2), "big") / 4
+    
+    def get_result_distance(self):
+        return int.from_bytes(self.read(RESULT_DISTANCE, 2), "big")
 
     def dump_debug_data(self):
+        p_measurement_status = self.get_result_range_status()
+        p_estimated_distance_mm = self.get_result_distance()
+        p_signal_kcps = self.get_result_signal_rate()
+        p_sigma_mm = self.get_result_sigma()
+        p_ambient_kcps = self.get_result_ambient_rate()
 
-        # only god knows what this shit is for
-        status_rtn = [ 255, 255, 255, 5, 2, 4, 1, 7, 3, 0,
-                       255, 255, 9, 13, 255, 255, 255, 255, 10, 6,
-                       255, 255, 11, 12]
-
-        p_measurement_status = int.from_bytes(self.read(RESULT_RANGE_STATUS, addrsize=8), "big")
-        p_estimated_distance_mm = int.from_bytes(self.read(RESULT_DISTANCE), "big")
-        p_signal_kcps = int.from_bytes(self.read(RESULT_SIGNAL_RATE), "big") * 8
-        p_sigma_mm = int.from_bytes(self.read(RESULT_SIGMA), "big") / 4
-        p_ambient_kcps = int.from_bytes(self.read(RESULT_AMBIENT_RATE), "big") * 8
-
-        p_measurement_status = p_measurement_status & 0x1F
-        if (p_measurement_status < 24):
-            p_measurement_status = status_rtn[p_measurement_status]
-        
         print("-------------------DEBUG DATA -----------------")
         print("p_measurement_status:    {}".format(p_measurement_status))
         print("p_estimated_distance_mm: {}".format(p_estimated_distance_mm))

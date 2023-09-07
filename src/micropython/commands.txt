@@ -1,4 +1,8 @@
 mpremote connect COM10 cp micropython/app.py :/app.py
 mpremote connect COM10 cp micropython/vl53l4cd.py :/vl53l4cd.py
+mpremote connect COM10 cp micropython/vl53l4cd_driver.py :/vl53l4cd_driver.py
+mpremote connect COM10 cp micropython/constants.py :/constants.py
+mpremote connect COM10 cp micropython/config.py :/config.py
+mpremote connect COM10 cp micropython/statistics.py :/statistics.py
 mpremote connect COM10 reset
 mpremote connect COM10 repl
