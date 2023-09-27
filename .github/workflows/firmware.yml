@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        name: micropython/micropython
+        repository: micropython/micropython
         ref: v1.20.0
     - name: Install packages
       run: source micropython/tools/ci.sh && micropython/ci_rp2_setup
