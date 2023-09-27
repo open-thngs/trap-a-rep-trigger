@@ -47,3 +47,8 @@ jobs:
         make ${MAKEOPTS} -C ports/rp2
         make ${MAKEOPTS} -C ports/rp2 BOARD=PICO
         
+    - name: Upload Firmware
+      uses: actions/upload-artifact@v3
+      with:
+        name: RepTrap-Firmware
+        path: micropython/ports/rp2/build-PICO
