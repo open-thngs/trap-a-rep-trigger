@@ -7,16 +7,22 @@ jobs:
     name: "Firmware Generation"
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@master
+      
     - uses: actions/checkout@master
       with:
         repository: micropython/micropython
         ref: v1.20.0
         submodules: true
+        
     - name: Install packages
       run: |
         source tools/ci.sh && ci_rp2_setup
+        
     - name: Copy board
       run: cp src/micropython/board/REPTRAP/. ports/rp2/boards/
+      
     - name: Copy project files
       run: |
         mkdir ports/rp2/boards/modules/
@@ -29,6 +35,7 @@ jobs:
         cp src/micropython/vl53l4cd.py ports/rp2/boards/modules/
         cp src/micropython/vl53l4cd_driver.py ports/rp2/boards/modules/
         cp src/micropython/main.py ports/rp2/boards/modules/
+        
     - name: Build Micropython
       run: |
         make submodules
