@@ -139,9 +139,9 @@ for sensor in sensor_array:
     sensor.start_temperature_update()
     sensor.set_xtalk(sensorcfg.get_sensor(sensor.name)["xtalk"])
     sensor.set_offset(sensorcfg.get_sensor(sensor.name)["offset"])
-    threashold_mm = sensor.get_height_trigger_threashold(30, 6)
+    threashold_mm = sensor.get_height_trigger_threashold(30, 5.5)
     sensor.sensor_init(vl53l4cd.Mode.LOW_POWER)
-    sensor.set_signal_threshold(7000)
+    sensor.set_signal_threshold(6000)
     print("Signal Threashold: {}".format(sensor.get_signal_threshold()))
     sensor.set_sigma_threshold(10)
     print("Sigma mm: {}".format(sensor.get_sigma_threshold()))
@@ -163,6 +163,12 @@ def check_temperature(tmp):
 
 # temperature_timer = machine.Timer(-1)
 # temperature_timer.init(period=3600*1000, mode=machine.Timer.PERIODIC, callback=check_temperature)
+
+for i in range(3):
+    led.on()
+    time.sleep(0.25)
+    led.off()
+    time.sleep(0.25)
 
 while True:
     print("Sleeping...")
