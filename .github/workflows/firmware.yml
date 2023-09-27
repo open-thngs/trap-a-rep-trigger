@@ -13,7 +13,7 @@ jobs:
         ref: v1.20.0
     - name: Install packages
       run: |
-        echo ls -la
+        ls -la
         source micropython/tools/ci.sh && micropython/ci_rp2_setup
     - name: Build Micropython
       run: |
