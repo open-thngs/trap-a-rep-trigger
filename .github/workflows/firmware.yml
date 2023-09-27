@@ -1,0 +1,25 @@
+name: "Firmware Generator"
+on: [push] 
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  make:
+    name: "Firmware Generation"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        name: micropython/micropython
+        ref: v1.20.0
+    - name: Install packages
+      run: source micropython/tools/ci.sh && micropython/ci_rp2_setup
+    - name: Build Micropython
+      run: |
+        cd micropython/mpy-cross
+        make submodules
+        make clean
+        make ${MAKEOPTS} -C mpy-cross
+        make ${MAKEOPTS} -C ports/rp2 submodules
+        make ${MAKEOPTS} -C ports/rp2
+        make ${MAKEOPTS} -C ports/rp2 BOARD=REPTRAP
+        
