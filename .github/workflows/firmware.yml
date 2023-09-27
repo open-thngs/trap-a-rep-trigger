@@ -42,8 +42,6 @@ jobs:
     - name: Build Micropython
       run: |
         cd micropython
-        make submodules
-        make clean
         make ${MAKEOPTS} -C mpy-cross
         make ${MAKEOPTS} -C ports/rp2 submodules
         make ${MAKEOPTS} -C ports/rp2
