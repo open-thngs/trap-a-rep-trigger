@@ -8,7 +8,7 @@
         "External Flash",
         "USB"
     ],
-    "id": "reptrap",
+    "id": "rp2-pico",
     "images": [
         "reptrap.jpg"
     ],
