@@ -23,8 +23,8 @@ jobs:
         
     - name: Copy board
       run: |
-        mkdir /micropython/ports/rp2/boards/REPTRAP/
-        cp -a /src/micropython/board/REPTRAP/. /micropython/ports/rp2/boards/REPTRAP/
+        mkdir micropython/ports/rp2/boards/REPTRAP
+        cp -a src/micropython/board/REPTRAP/. micropython/ports/rp2/boards/REPTRAP
       
     - name: Copy project files
       run: |
