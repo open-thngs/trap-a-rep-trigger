@@ -11,13 +11,26 @@ jobs:
       with:
         repository: micropython/micropython
         ref: v1.20.0
+        submodules: true
     - name: Install packages
       run: |
-        ls -la
-        source micropython/tools/ci.sh && micropython/ci_rp2_setup
+        source tools/ci.sh && ci_rp2_setup
+    - name: Copy board
+      run: cp src/micropython/board/REPTRAP/. ports/rp2/boards/
+    - name: Copy project files
+      run: |
+        mkdir ports/rp2/boards/modules/
+        cp src/micropython/app.py ports/rp2/boards/modules/
+        cp src/micropython/config.py ports/rp2/boards/modules/
+        cp src/micropython/constants.py ports/rp2/boards/modules/
+        cp src/micropython/lowpower.py ports/rp2/boards/modules/
+        cp src/micropython/sensorcfg.py ports/rp2/boards/modules/
+        cp src/micropython/statistics.py ports/rp2/boards/modules/
+        cp src/micropython/vl53l4cd.py ports/rp2/boards/modules/
+        cp src/micropython/vl53l4cd_driver.py ports/rp2/boards/modules/
+        cp src/micropython/main.py ports/rp2/boards/modules/
     - name: Build Micropython
       run: |
-        cd micropython/mpy-cross
         make submodules
         make clean
         make ${MAKEOPTS} -C mpy-cross
