@@ -1,0 +1,20 @@
+{
+    "deploy": [
+        "../deploy.md"
+    ],
+    "docs": "",
+    "features": [
+        "Dual-core",
+        "External Flash",
+        "USB"
+    ],
+    "id": "reptrap",
+    "images": [
+        "reptrap.jpg"
+    ],
+    "mcu": "rp2040",
+    "product": "RepTrap",
+    "thumbnail": "",
+    "url": "https://www.open-things.de/thing-2.html",
+    "vendor": "OPEN THINGS"
+}

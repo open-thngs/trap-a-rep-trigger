@@ -1,0 +1,10 @@
+include("$(PORT_DIR)/boards/manifest.py")
+
+module("app.py", base_path="3thparty/reptrap")
+module("config.py", base_path="3thparty/reptrap")
+module("constants.py", base_path="3thparty/reptrap")
+module("lowpower.py", base_path="3thparty/reptrap")
+module("sensorcfg.py", base_path="3thparty/reptrap")
+module("statistics.py", base_path="3thparty/reptrap")
+module("vl53l4cd.py", base_path="3thparty/reptrap")
+module("vl53l4cd_driver.py", base_path="3thparty/reptrap")
