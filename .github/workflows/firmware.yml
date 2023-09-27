@@ -51,4 +51,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: RepTrap-Firmware
-        path: micropython/ports/rp2/build-PICO
+        path: |
+          micropython/ports/rp2/build-PICO/firmware.hex
+          micropython/ports/rp2/build-PICO/firmware.uf2
+          micropython/ports/rp2/build-PICO/firmware.bin
