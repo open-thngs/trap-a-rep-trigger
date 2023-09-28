@@ -3,7 +3,12 @@
 # SPDX-License-Identifier: CC0-1.0
 
 name: "KiBot CI"
-on: [push, pull_request] 
+on:
+  push:
+    tags:        
+      - '**'
+    paths:
+      - pcb/**
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
