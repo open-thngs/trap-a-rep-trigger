@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DRV5032DULPGM
+D Board Mount Hall Effect / Magnetic Sensors Low power (5 Hz, <1 uA), low voltage (up to 5.5V) switch 3-TO-92 -40 to 85
+K
+F https://www.ti.com/lit/gpn/drv5032
+$ENDCMP
+#
+#End Doc Library
