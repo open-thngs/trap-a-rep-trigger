@@ -5,14 +5,14 @@ from micropython import const
 import time
 import vl53l4cd
 import statistics
-import lowpower
+# import lowpower
 import sensorcfg
 
 TEMPERATURE_CONVERSION_FACTOR = 3.3 / (65535)
 TEMPERATURE_OFFSET = const(0.706)
 
-TIME_TO_MEASURE = const(80)
-MEASURE_FREQUENCY = const(100)
+TIME_TO_MEASURE = const(40)
+MEASURE_FREQUENCY = const(50)
 
 VL53_ADDR_1 = const(42)
 VL53_XSHUNT_1 = const(0)     
@@ -169,11 +169,11 @@ for i in range(3):
     led.off()
     time.sleep(0.25)
 
-while True:
-    print("Sleeping...")
+# while True:
+    # print("Sleeping...")
  #   # machine.lightsleep()
 #     print("woke... n wait")
-    lowpower.dormant_until_pins([VL53_INT_1, VL53_INT_2, VL53_INT_3, VL53_INT_4], edge=False , high=False)
+    # lowpower.dormant_until_pins([VL53_INT_1, VL53_INT_2, VL53_INT_3, VL53_INT_4], edge=False , high=False)
  #   # lowpower.lightsleep()
  #   print("woke... n wait")
-    time.sleep(3)
+    # time.sleep(3)
