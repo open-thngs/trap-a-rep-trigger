@@ -56,8 +56,14 @@
         }
       ],
       "drc_exclusions": [
-        "lib_footprint_issues|150418800|97688400|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000",
-        "missing_courtyard|149958650|97687859|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000"
+        "lib_footprint_issues|150418800|103911400|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000",
+        "missing_courtyard|149958650|103910859|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000",
+        "silk_edge_clearance|203795000|109242303|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|f26f0bc0-f7fe-4f05-8f2c-997d0a827bb6",
+        "silk_edge_clearance|211495000|109245072|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|5f956d95-5b58-438a-aabf-6becf6d49774",
+        "silk_edge_clearance|211495000|109252500|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|caafbfd4-6859-4a27-87a8-e037e5fe7d59",
+        "silk_edge_clearance|215025100|109246342|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|ec0c765c-48c9-4575-a9c3-9ad6dd01b3b4",
+        "silk_edge_clearance|225286700|109250032|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|15825d72-2880-4e4f-acd6-02684e7b2574",
+        "starved_thermal|205105000|80899000|97b18284-8e2b-4d4a-9bf5-ed7e5ef5414e|c1b75f16-c556-4010-8857-63af5d774fc4|In1.Cu"
       ],
       "meta": {
         "version": 2
@@ -116,7 +122,7 @@
         "max_error": 0.005,
         "min_clearance": 0.0,
         "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.0,
+        "min_copper_edge_clearance": 0.25,
         "min_hole_clearance": 0.127,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.19999999999999998,
@@ -179,7 +185,8 @@
         0.15,
         0.2,
         0.25,
-        0.4
+        0.4,
+        0.6
       ],
       "via_dimensions": [
         {
@@ -201,7 +208,12 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      "multiple_net_names|330200|228600|5724e72f-4d51-4e77-bc21-46d106247b74|6cb9b9dd-6e24-4914-8382-764c5faa902d|||",
+      "multiple_net_names|330200|254000|0d4578ef-3084-4fc5-83ce-7bbe026bc8d6|9cc17c4c-69e8-4a2c-8495-d6a43366f548|||",
+      "multiple_net_names|330200|279400|72690b7b-2b39-49a8-8e3f-c8d1a977db34|b14a63e7-38b7-4a5d-b7be-48632b09b543|||",
+      "multiple_net_names|330200|304800|0f7189bf-963d-444c-822c-86e5826b2b5a|39248e23-988f-4918-9837-609abf929cdd|||"
+    ],
     "meta": {
       "version": 0
     },
@@ -451,8 +463,8 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "specctra_dsn": "",
-      "step": "",
+      "specctra_dsn": "rep-trap-pcb.dsn",
+      "step": "rep-trap-pcb.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""

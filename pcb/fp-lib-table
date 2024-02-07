@@ -17,4 +17,6 @@
   (lib (name "124018612112A")(type "KiCad")(uri "${KIPRJMOD}/components/124018612112A/124018612112A.pretty")(options "")(descr ""))
   (lib (name "ECS-2033-120-BN")(type "KiCad")(uri "${KIPRJMOD}/components/ECS-2033-120-BN")(options "")(descr ""))
   (lib (name "APHF1608LSEEQBDZGKC")(type "KiCad")(uri "${KIPRJMOD}/components/APHF1608LSEEQBDZGKC/KiCad")(options "")(descr ""))
+  (lib (name "LESD5D5.0CT1G")(type "KiCad")(uri "${KIPRJMOD}/components/LESD5D5.0CT1G")(options "")(descr ""))
+  (lib (name "1N5819HW-7-F")(type "KiCad")(uri "${KIPRJMOD}/components/1N5819HW-7-F")(options "")(descr ""))
 )
