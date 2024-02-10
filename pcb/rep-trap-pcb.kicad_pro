@@ -34,9 +34,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.762,
-          "height": 1.524,
-          "width": 1.524
+          "drill": 2.5,
+          "height": 5.0,
+          "width": 5.0
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -57,12 +57,17 @@
       ],
       "drc_exclusions": [
         "lib_footprint_issues|150418800|103911400|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000",
+        "lib_footprint_mismatch|146435000|96113600|8c9fab6b-2337-46cb-9523-fd3d1db81371|00000000-0000-0000-0000-000000000000",
         "missing_courtyard|149958650|103910859|df3b4a89-b112-42c8-aa6a-b142042ff89a|00000000-0000-0000-0000-000000000000",
-        "silk_edge_clearance|203795000|109242303|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|f26f0bc0-f7fe-4f05-8f2c-997d0a827bb6",
-        "silk_edge_clearance|211495000|109245072|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|5f956d95-5b58-438a-aabf-6becf6d49774",
+        "silk_edge_clearance|203795000|109245914|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|f26f0bc0-f7fe-4f05-8f2c-997d0a827bb6",
+        "silk_edge_clearance|211495000|109247467|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|5f956d95-5b58-438a-aabf-6becf6d49774",
         "silk_edge_clearance|211495000|109252500|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|caafbfd4-6859-4a27-87a8-e037e5fe7d59",
-        "silk_edge_clearance|215025100|109246342|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|ec0c765c-48c9-4575-a9c3-9ad6dd01b3b4",
-        "silk_edge_clearance|225286700|109250032|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|15825d72-2880-4e4f-acd6-02684e7b2574",
+        "silk_edge_clearance|215025100|109248179|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|ec0c765c-48c9-4575-a9c3-9ad6dd01b3b4",
+        "silk_edge_clearance|225286700|109250249|eeeb8669-b3d7-4ceb-a81f-fcefc9fbc685|15825d72-2880-4e4f-acd6-02684e7b2574",
+        "silk_edge_clearance|75285000|85261000|5ce56a0d-9798-4fba-83ac-95b838e2e086|b94c3ad5-67bf-4585-b67d-3e71b88d964d",
+        "silk_edge_clearance|75311000|103261000|5ce56a0d-9798-4fba-83ac-95b838e2e086|ba36281f-264f-42fb-8b77-dcf1c8a83e11",
+        "silk_edge_clearance|75311000|85261000|5ce56a0d-9798-4fba-83ac-95b838e2e086|8dc69a11-ed33-4d6c-bbe1-772cc7ebd797",
+        "silk_over_copper|173267155|86117600|f0e14e60-2c80-4e5b-bb8f-4eab5b971281|00000000-0000-0000-0000-000000000000",
         "starved_thermal|205105000|80899000|97b18284-8e2b-4d4a-9bf5-ed7e5ef5414e|c1b75f16-c556-4010-8857-63af5d774fc4|In1.Cu"
       ],
       "meta": {
