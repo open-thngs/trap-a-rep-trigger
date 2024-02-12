@@ -1128,7 +1128,7 @@
     (property "Sheetname" "PSU and charging")
     (property "SnapEDA_Link" "https://www.snapeda.com/parts/124019572112A/Amphenol/view-part/?ref=snap")
     (path "/eebb1d37-a01d-4adf-be70-a8e8f9293475/23008b32-6835-495f-a93f-d60d3125c4cb/400fafaa-65d5-4e15-8997-185cb1b3c3b7")
-    (attr smd)
+    (attr through_hole)
     (fp_text reference "J8" (at 3.05 0.625 unlocked) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 15c87edd-4661-4360-b6e9-507016c10a74)
@@ -2367,7 +2367,7 @@
     (property "Sheetfile" "main.kicad_sch")
     (property "Sheetname" "main")
     (path "/eebb1d37-a01d-4adf-be70-a8e8f9293475/e95856e6-1f40-4fe0-8527-f4789f9592e2")
-    (attr smd)
+    (attr through_hole)
     (fp_text reference "J3" (at 1.805793 -5.310073 90) (layer "F.SilkS") hide
         (effects (font (size 0.5 0.5) (thickness 0.125)))
       (tstamp 88cb519e-d48c-4c53-9bd0-95444ac20bd5)
