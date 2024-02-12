@@ -19,4 +19,5 @@
   (lib (name "APHF1608LSEEQBDZGKC")(type "KiCad")(uri "${KIPRJMOD}/components/APHF1608LSEEQBDZGKC/KiCad")(options "")(descr ""))
   (lib (name "LESD5D5.0CT1G")(type "KiCad")(uri "${KIPRJMOD}/components/LESD5D5.0CT1G")(options "")(descr ""))
   (lib (name "1N5819HW-7-F")(type "KiCad")(uri "${KIPRJMOD}/components/1N5819HW-7-F")(options "")(descr ""))
+  (lib (name "ESP32-S3")(type "KiCad")(uri "${KIPRJMOD}/components/ESP32-S3")(options "")(descr ""))
 )

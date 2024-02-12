@@ -16,4 +16,5 @@
   (lib (name "124018612112A")(type "KiCad")(uri "${KIPRJMOD}/components/124018612112A/124018612112A.kicad_sym")(options "")(descr ""))
   (lib (name "ECS-2033-120-BN")(type "KiCad")(uri "${KIPRJMOD}/components/ECS-2033-120-BN/ECS-2033-120-BN.kicad_sym")(options "")(descr ""))
   (lib (name "APHF1608LSEEQBDZGKC")(type "KiCad")(uri "${KIPRJMOD}/components/APHF1608LSEEQBDZGKC/KiCad/APHF1608LSEEQBDZGKC.kicad_sym")(options "")(descr ""))
+  (lib (name "Espressif")(type "KiCad")(uri "${KIPRJMOD}/components/ESP32-S3/Espressif.kicad_sym")(options "")(descr ""))
 )
