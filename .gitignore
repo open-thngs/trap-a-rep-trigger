@@ -36,3 +36,5 @@ fp-info-cache
 # vscode + platformio
 .pio
 .vscode/*
+
+pcb/~rep-trap-pcb.kicad_sch.lck

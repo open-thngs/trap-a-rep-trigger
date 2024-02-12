@@ -1,0 +1,26 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#SamacSys ECAD Model DRV5032DULPGM
+#/15402115/1102845/2.50/3/3/Integrated Circuit
+DEF DRV5032DULPGM IC 0 30 Y Y 1 F N
+F0 "IC" 750 300 50 H V L CNN
+F1 "DRV5032DULPGM" 750 200 50 H V L CNN
+F2 "DRV5032DULPGM" 750 100 50 H I L CNN
+F3 "https://www.ti.com/lit/gpn/drv5032" 750 0 50 H I L CNN
+F4 "Board Mount Hall Effect / Magnetic Sensors Low power (5 Hz, <1 uA), low voltage (up to 5.5V) switch 3-TO-92 -40 to 85" 750 -100 50 H I L CNN "Description"
+F5 "5.05" 750 -200 50 H I L CNN "Height"
+F6 "Texas Instruments" 750 -300 50 H I L CNN "Manufacturer_Name"
+F7 "DRV5032DULPGM" 750 -400 50 H I L CNN "Manufacturer_Part_Number"
+F8 "595-DRV5032DULPGM" 750 -500 50 H I L CNN "Mouser Part Number"
+F9 "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/DRV5032DULPGM?qs=OlC7AqGiEDk9MwfBkgsRPw%3D%3D" 750 -600 50 H I L CNN "Mouser Price/Stock"
+F10 "DRV5032DULPGM" 750 -700 50 H I L CNN "Arrow Part Number"
+F11 "https://www.arrow.com/en/products/drv5032dulpgm/texas-instruments?region=nac" 750 -800 50 H I L CNN "Arrow Price/Stock"
+DRAW
+X VCC 1 0 -200 200 R 50 50 0 0 P
+X GND 2 0 -100 200 R 50 50 0 0 P
+X OUT2 3 0 0 200 R 50 50 0 0 P
+P 5 0 1 6 200 100 700 100 700 -300 200 -300 200 100 N
+ENDDRAW
+ENDDEF
+#
+#End Library

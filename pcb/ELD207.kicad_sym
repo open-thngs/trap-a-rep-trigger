@@ -13,10 +13,6 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (symbol "ELD207_0_1"
-      (rectangle (start -19.05 6.35) (end 17.78 -11.43)
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
       (polyline
         (pts
           (xy -2.54 -7.62)
@@ -235,6 +231,10 @@
       )
     )
     (symbol "ELD207_1_1"
+      (rectangle (start -19.05 6.35) (end 17.78 -11.43)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
       (pin input line (at -21.59 3.81 0) (length 2.54)
         (name "ANODE_1" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))

@@ -41,7 +41,6 @@ print("Current RP2040 frequency: {} MHz".format(machine.freq() / 1000000))
 # print("New RP2040 frequency: {} MHz".format(machine.freq() / 1000000))
 
 debugging = False
-scheduler = micropython.schedule
 last_temperature = 0
 
 shutter = Pin(29, Pin.OUT, Pin.PULL_DOWN)
