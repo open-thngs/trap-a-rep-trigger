@@ -40,3 +40,5 @@ fp-info-cache
 pcb/~rep-trap-pcb.kicad_sch.lck
 
 pcb/~rep-trap-pcb.kicad_pcb.lck
+
+*.lck
