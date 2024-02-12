@@ -38,3 +38,5 @@ fp-info-cache
 .vscode/*
 
 pcb/~rep-trap-pcb.kicad_sch.lck
+
+pcb/~rep-trap-pcb.kicad_pcb.lck
