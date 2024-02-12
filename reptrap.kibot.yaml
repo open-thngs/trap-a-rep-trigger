@@ -24,7 +24,6 @@ outputs:
       point_of_view:
         rotate_x: 45
         rotate_y: 45
-        rotate_z: 75
       pcb3d:
         download: true
       render_options:
