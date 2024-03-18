@@ -1909,7 +1909,7 @@
     (property "Reference" "R2" (at 126.492 58.3184 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "10k" (at 126.492 56.007 0)
+    (property "Value" "10k/DNP" (at 126.492 56.007 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 130.048 57.15 90)
