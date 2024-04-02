@@ -9,6 +9,22 @@ uint8_t  == 1 byte == >B
 struct.unpack(...)
 '''
 
+STATUS = {
+    0: "None",
+    1: "WARNING: Sigma is above the defined threshold",
+    2: "WARNING: Signal is below the defined threshold",
+    3: "ERROR: Measured distance is below detection threshold",
+    4: "ERROR: Phase out of valid limit",
+    5: "ERROR: Hardware fail",
+    6: "WARNING: Phase valid but no wrap around check performed",
+    7: "ERROR: Wrapped target, phase does not match",
+    8: "ERROR: Processing fail",
+    9: "ERROR: Crosstalk signal fail",
+    10: "ERROR: Interrupt error",
+    11: "ERROR: Merged target",
+    12: "ERROR: Signal is too low"
+}
+
 class VL53L4CD_DRIVER:
 
     status_rtn = [ 255, 255, 255, 5, 2, 4, 1, 7, 3,
@@ -286,6 +302,7 @@ class VL53L4CD_DRIVER:
 
     def dump_debug_data(self):
         p_measurement_status = self.get_result_range_status()
+        self.print_status(p_measurement_status)
         p_estimated_distance_mm = self.get_result_distance()
         p_signal_kcps = self.get_result_signal_rate()
         p_sigma_mm = self.get_result_sigma()
@@ -298,6 +315,12 @@ class VL53L4CD_DRIVER:
         print("p_sigma_mm:              {}".format(p_sigma_mm))
         print("p_ambient_kcps:          {}".format(p_ambient_kcps))
         print("-----------------------------------------------")
+
+    def print_status(self, status):
+        if status in STATUS:
+            print(STATUS[status])
+        else:
+            print("Other error (for example, boot error)")
 
     def write(self, address, data, addrsize=16):
         try:
