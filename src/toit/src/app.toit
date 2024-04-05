@@ -2,12 +2,13 @@ import .rgb-led show RGBLED
 import gpio
 import i2c
 import .vl53l4cd
+import system.storage
 
 // TEMPERATURE_CONVERSION_FACTOR ::= 3.3 / (65535)
 // TEMPERATURE_OFFSET ::= 0.706
 
-TIME_TO_MEASURE   ::= 40
-MEASURE_FREQUENCY ::= 50
+TIME-TO-MEASURE   ::= 40
+MEASURE-FREQUENCY ::= 50
 
 VL53_ADDR_1     ::= 42
 VL53_XSHUNT_1   ::= 47
@@ -39,6 +40,8 @@ main:
   shutter := gpio.Pin 11 --output=true
   focus := gpio.Pin 10 --output=true
 
+  bucket := storage.Bucket.open --flash "sensor-cfg"
+
   bus := i2c.Bus
     --sda=gpio.Pin 38
     --scl=gpio.Pin 48
@@ -53,15 +56,11 @@ main:
   sensor-array.do: |sensor|
     sensor.init
 
-  // sensorcfg = SensorCfg()
-  // sensorcfg.load()
-
   sensor-array.do: |sensor|
       print "---------- $sensor.name ------------"
       sensor.start-temperature-update
-      // apply_sensor_cfg(sensorcfg)
-      threashold-mm := sensor.get-height-trigger-threshold 30 5.5
-      print "Threashold: $threashold-mm"
+      apply_sensor_cfg sensor bucket
+      threashold-mm := sensor.get-height-trigger-threshold 30 10
       sensor.set-mode MODE-LOW-POWER
       sensor.set-signal-threshold 5000
       print "Signal Threashold: $sensor.get-signal-threshold"
@@ -71,6 +70,9 @@ main:
       sensor.set-interrupt threashold-mm true
       // sensor.enable-interrupt interrupt-handler
       sensor.start-ranging
+      print "System Status: $sensor.get-system-status"
+      print "result-range-status: $sensor.driver_.get-result-range-status"
+      sensor.clear-interrupt
 
   task::vl53l-1-interrupt-handler
   task::vl53l-2-interrupt-handler
@@ -78,10 +80,24 @@ main:
   task::vl53l-4-interrupt-handler
 
   3.repeat:
-      led.red
-      sleep --ms=250
-      led.off
-      sleep --ms=250
+    led.red
+    sleep --ms=250
+    led.off
+    sleep --ms=250
+
+apply-sensor-cfg sensor bucket:
+  e1 := catch:
+    offset := bucket[sensor.name+"-offset"]
+    print "Setting offset for $sensor.name to $offset"
+    sensor.set-offset offset
+  if e1: print "Error setting offset for $sensor.name"
+
+  e2 := catch:
+    xtalk := bucket[sensor.name+"-xtalk"]
+    if xtalk > 0:
+      print "Setting xtalk for $sensor.name to $xtalk"
+      sensor.set-xtalk xtalk
+  if e2: print "Error setting xtalk for $sensor.name"
 
 vl53l-1-interrupt-handler:
   interrupt-handler vl53-1
@@ -100,6 +116,7 @@ interrupt-handler sensor:
     while true:
       sensor.interrupt_pin_.wait-for 0
       print "Interrupt $sensor.name 0"
+      print "Distance: $sensor.get-distance"
       sensor.clear-interrupt
       sensor.interrupt_pin_.wait-for 1
       print "Interrupt $sensor.name 1"

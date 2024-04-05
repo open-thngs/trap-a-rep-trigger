@@ -7,6 +7,8 @@ import ringbuffer
 MODE-DEFAULT := "default"
 MODE-LOW-POWER := "low-power"
 
+THRESHOLD-MAX-VALUE ::= 1500.0
+
 class VL53L4CD:
   bus_ := ?
   name := ?
@@ -49,7 +51,9 @@ class VL53L4CD:
       configure-sensor-low-power-mode_
 
   configure-sensor-low-power-mode_:
+    // driver_.dump
     driver_.write_config VL53L4CD-ULTRA-LOW-POWER-CONFIG
+    // driver_.dump
     start_vhv
     driver_.clear_interrupt
     driver_.stop_ranging
@@ -60,7 +64,9 @@ class VL53L4CD:
     driver_.write_ #[0x00,0x4B] #[0x03]
 
   configure-sensor-default-mode_:
+    // driver_.dump
     driver_.write_config VL53L4CD-ULTRA-LITE-DRIVER-CONFIG
+    // driver_.dump
     start_vhv
     driver_.clear_interrupt
     driver_.stop_ranging
@@ -105,6 +111,9 @@ class VL53L4CD:
   set-sigma-threshold threshold:
     driver_.set-sigma-threshold threshold
 
+  get-distance -> int:
+    return driver_.get-distance
+
   start-vhv:
     driver_.start-vhv
     with-timeout (Duration --ms=1000):
@@ -140,33 +149,36 @@ class VL53L4CD:
       driver_.clear-interrupt
     driver_.stop-ranging
 
-  get-height-trigger-threshold intensity=25 factor=5.0 -> int:
+  get-height-trigger-threshold intensity=25 percentage=10.0 -> int:
     set-mode MODE-DEFAULT
 
+    set-signal-threshold 5000
+    set-sigma-threshold 10
+    set-measure-timings 40 50
     heights := ringbuffer.RingBuffer intensity
     device-heat-loop
     
     start-ranging
+    distance := 0.0
     intensity.repeat:
       while not driver_.is-data-ready:
         sleep --ms=1
       
-      heights.append (driver_.get-distance).to-float
-      print "Height added: $heights.get-last"
+      distance = (driver_.get-distance).to-float
+      heights.append distance
+      print "Height added: $distance"
       driver_.clear-interrupt
 
     stop-ranging
     mean-distance := heights.average
-    std-deviation := heights.std-deviation
 
-    threshold := mean-distance - factor * std-deviation
-    print "Measured Threshold: $threshold"
-    if threshold > 1300 or threshold <= 0:
-      threshold = 1300.0
+    threshold := mean-distance - (percentage / 100.0) * mean-distance
+    if threshold > THRESHOLD-MAX-VALUE or threshold <= 0:
+      threshold = THRESHOLD-MAX-VALUE
 
-    print "Average: $mean-distance"
-    print "Std Deviation: $std-deviation"
-    print "Threshold: $threshold"
+    print "Average: $mean-distance.to-int"
+    print "Threshold percentage: $percentage"
+    print "Threshold: $threshold.to-int"
 
     return threshold.to-int
 
@@ -188,11 +200,14 @@ class VL53L4CD:
     
     stop-ranging
 
-    mean-distance := distances.average
+    mean-distance := distances.average.to-int
     pre-offset := target-distance-mm - mean-distance
     tmp-offset := pre-offset * 4
     driver_.set-offset tmp-offset 0x00 0x00
     return tmp-offset
+
+  set-offset offset:
+    driver_.set-offset offset 0x00 0x00
 
   calibrate-xtalk target-distance-mm nb-samples:
     if (nb-samples < 5 or nb-samples > 255) or (target-distance-mm < 10 or target-distance-mm > 5000):
@@ -239,6 +254,9 @@ class VL53L4CD:
     
     driver_.set-cross-talk xtalk-kcps.to-int
     return xtalk_kcps
+
+  set-xtalk xtalk:
+    driver_.set-cross-talk xtalk
 
   get-result -> Result:
     result/Result := Result

@@ -1,6 +1,7 @@
 import i2c
 import .constants
 import .struct
+import .config
 
 class VL53L4CD-DRIVER:
 
@@ -182,7 +183,6 @@ class VL53L4CD-DRIVER:
 
   get-distance:
     distance := read_ RESULT_DISTANCE --length=2
-    print "Distance raw: $distance"
     return unpack-16 distance
 
   set-interrupt-config threshold-mm trigger-only-below-threshold/bool:
@@ -224,8 +224,7 @@ class VL53L4CD-DRIVER:
     write_ MIN-COUNT-RATE-RTN-LIMIT-MCPS (pack-16 (signal-kcps >> 3))
 
   get-result-range-status -> int:
-    value := unpack-16 (read_ RESULT-RANGE-STATUS)
-    value = value & 0x1F
+    value := (read_ RESULT-RANGE-STATUS)[0] & 0x1F
     if value < 24:
       return status_rtn[value]
     return value
@@ -251,4 +250,5 @@ class VL53L4CD-DRIVER:
   write_ register/ByteArray data/ByteArray:
     device_.write-address register data
 
-  
+  dump:
+    print "SensorConfig: $(read_ SENSOR_CONFIG --length=91)"
