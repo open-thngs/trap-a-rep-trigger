@@ -148,7 +148,7 @@ for sensor in sensor_array:
     print("----------{}------------".format(sensor.name))
     sensor.start_temperature_update()
     apply_sensor_cfg(sensorcfg)
-    threashold_mm = sensor.get_height_trigger_threashold(30, 5.5)
+    threashold_mm = sensor.get_height_trigger_threashold(30, 10)
     sensor.sensor_init(vl53l4cd.Mode.LOW_POWER)
     sensor.set_signal_threshold(5000)
     print("Signal Threashold: {}".format(sensor.get_signal_threshold()))

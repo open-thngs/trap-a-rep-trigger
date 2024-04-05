@@ -139,13 +139,13 @@ class VL53L4CD:
         return self.driver.get_signal_threshold()
     
     def set_signal_threshold(self, signal_threshold):
-        return self.driver.set_signal_threshold(signal_threshold)
+        self.driver.set_signal_threshold(signal_threshold)
     
     def get_sigma_threshold(self):
         return self.driver.get_sigma_threshold()
     
     def set_sigma_threshold(self, sigma_threshold):
-        return self.driver.set_sigma_threshold(sigma_threshold)
+        self.driver.set_sigma_threshold(sigma_threshold)
     
     def _start_vhv(self):
         self.driver.write(0x0087, b'\x40')
@@ -186,7 +186,7 @@ class VL53L4CD:
     def dump_debug_data(self):
         self.driver.dump_debug_data()
 
-    def get_height_trigger_threashold(self, intensitiy=25, factor=5) -> int:
+    def get_height_trigger_threashold(self, intensitiy=25, percentage=10) -> int:
         self.sensor_init(Mode.DEFAULT)
 
         heights = []
@@ -200,21 +200,18 @@ class VL53L4CD:
 
             distance = self.get_distance()
             heights.append(distance)
-            # print("distance: {}mm".format(distance))
+            print("distance: {}mm".format(distance))
             self.clear_interrupt()
             
         self.stop_ranging()
-
         mean_distance = statistics.mean(heights)
-        std_deviation = statistics.stdev(heights)
 
-        threshold = mean_distance - factor * std_deviation
+        threshold = mean_distance - (percentage / 100.0) * mean_distance
         if threshold > 1300:
             threshold = 1300
 
         print("Average:", mean_distance)
-        print("std deviation:", std_deviation)
-        print("threshold:", int(threshold))
+        print("Threshold:", int(threshold))
 
         return int(threshold)
     
