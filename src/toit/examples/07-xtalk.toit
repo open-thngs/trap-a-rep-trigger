@@ -1,6 +1,6 @@
 import i2c
 import gpio
-import ..vl53l4cd show VL53L4CD
+import app.vl53l4cd show VL53L4CD
 
 VL53_ADDR_1 ::= 42
 VL53_XSHUNT_1 ::= 47
@@ -20,9 +20,7 @@ main:
 
   sensor := VL53L4CD bus "VL531" VL53_XSHUNT_1 VL53_INT_1 VL53-ADDR-1
   sensor.xshut-pin_.set 1
-  print "Scan before: $bus.scan"
-  print "Sensor ID: $sensor.get-id Module Type: $sensor.get-module-type"
   sensor.init
-  print "Scan after: $bus.scan"
-  print "Sensor ID: $sensor.get-id Module Type: $sensor.get-module-type"
+  sensor.set-cross-talk 123
+  
 

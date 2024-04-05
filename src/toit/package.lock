@@ -1,0 +1,8 @@
+prefixes:
+  ringbuffer: toit-ringbuffer
+packages:
+  toit-ringbuffer:
+    url: github.com/informaticore/toit-ringbuffer
+    name: ringbuffer
+    version: 1.0.3
+    hash: 678df4a401ad504c97dbeac6e5ecdc4649e976b3
