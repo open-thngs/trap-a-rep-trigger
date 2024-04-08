@@ -43,4 +43,4 @@ pcb/~rep-trap-pcb.kicad_pcb.lck
 
 *.lck
 
-src/toit/.packages/github.com/informaticore/toit-ringbuffer/
+src/toit/.packages/
