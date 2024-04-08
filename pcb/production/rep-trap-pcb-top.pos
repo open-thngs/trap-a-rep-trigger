@@ -1,0 +1,55 @@
+### Footprint positions - created on Mon Feb 12 14:00:17 2024 ###
+### Printed by KiCad version 7.0.8
+## Unit = mm, Angle = deg.
+## Side : top
+# Ref     Val                  Package                               PosX       PosY       Rot  Side
+BT1       1042                 1042P                             146.6850   -96.3676    0.0000  top
+C1        1µF                 C_0603_1608Metric                 209.5445   -85.7910  -90.0000  top
+C2        1µF                 C_0603_1608Metric                 212.6055   -83.5710  180.0000  top
+C3        10µF                C_0603_1608Metric                 224.9170   -83.0450   90.0000  top
+C4        10µF                C_0603_1608Metric                 217.8050   -83.4520   90.0000  top
+C13       0.1µF               C_0603_1608Metric                 206.3750   -83.8200  180.0000  top
+C14       10uF                 C_0603_1608Metric                  77.2290  -106.6800  180.0000  top
+C15       0.1uF                C_0603_1608Metric                  77.2030  -105.0290  180.0000  top
+C16       1uF                  C_0603_1608Metric                  87.4150  -105.1560    0.0000  top
+C17       0.1uF/DNP            C_0603_1608Metric                  91.3000  -108.2040  180.0000  top
+C18       0.1uF/DNP            C_0603_1608Metric                  94.6020   -83.5660    0.0000  top
+C19       0.1µF               C_0603_1608Metric                 101.3460   -98.6660  -90.0000  top
+C20       0.1µF               C_0603_1608Metric                 214.8840   -94.9830  -90.0000  top
+D1        LESD5D5.0CT1G        LESD5D50CT1G                      224.0030   -97.2820  180.0000  top
+D2        LED_RED              LED_0603_1608Metric               196.4690   -82.6008    0.0000  top
+D3        LED_GREEN            LED_0603_1608Metric               189.4331   -82.6008    0.0000  top
+D4        LESD5D5.0CT1G        LESD5D50CT1G                      218.1610   -99.6950    0.0000  top
+D5        ILD213T              SO-8_3.9x4.9mm_P1.27mm            205.7400   -91.4400  -90.0000  top
+D6        LESD5D5.0CT1G        LESD5D50CT1G                      222.1480   -99.6950  180.0000  top
+D7        1N5819HW-7-F         SOD3716X145N                      224.1550   -93.1400  -90.0000  top
+IC1       DRV5032FB            DRV5032DULPGM                     206.3750   -81.1530    0.0000  top
+J3        SJ-3541AS-SMT-TR-67  CUI_SJ-3541AS-SMT-TR-67           207.6450  -109.2525   90.0000  top
+J5        Conn_01x02_Pin       PinSocket_1x02_P2.54mm_Vertical   212.7250   -81.0010   90.0000  top
+J8        124018612112A        CONN_124018612112A_AMP            217.1059  -104.4208    0.0000  top
+J9        DNP                  PinSocket_1x06_P2.54mm_Vertical    78.3590   -81.1530   90.0000  top
+LED2      APHF1608LSEEQBDZGKC  APHF1608LSEEQBDZGKC               182.3974   -82.6008    0.0000  top
+R1        5k1                  R_0603_1608Metric                 223.9650  -101.8540  180.0000  top
+R2        4.7k                 R_0603_1608Metric                  98.6160  -101.0920  180.0000  top
+R3        10k                  R_0603_1608Metric                  98.6160   -99.3140    0.0000  top
+R4        2k                   R_0603_1608Metric                 223.2020   -80.5180    0.0000  top
+R5        1k                   R_0603_1608Metric                 196.4060   -80.6450  180.0000  top
+R6        1k                   R_0603_1608Metric                 189.4200   -80.6450  180.0000  top
+R15       0R                   R_0603_1608Metric                  98.6160  -104.6480    0.0000  top
+R16       0R                   R_0603_1608Metric                  98.6160  -102.8700    0.0000  top
+R17       10k                  R_0603_1608Metric                  84.2270  -105.1560  180.0000  top
+R19       10k                  R_0603_1608Metric                 210.5030   -89.1540    0.0000  top
+R20       2.2k                 R_0603_1608Metric                  98.9330   -86.8680    0.0000  top
+R21       2.2k                 R_0603_1608Metric                  98.9170   -88.6460    0.0000  top
+R22       5k1                  R_0603_1608Metric                 216.3450  -101.8540    0.0000  top
+R23       100R                 R_0603_1608Metric                 207.6450   -86.1060  -90.0000  top
+R24       100R                 R_0603_1608Metric                 205.7400   -86.1060  -90.0000  top
+R25       1k2                  R_0603_1608Metric                 178.9430   -81.9150  180.0000  top
+R29       2k2                  R_0603_1608Metric                 178.9430   -80.1370    0.0000  top
+R30       390R                 R_0603_1608Metric                 178.9430   -83.6930    0.0000  top
+SW1       SKRKAEE020           SKRKAEE020                         95.7580   -81.0260  180.0000  top
+SW2       SKRKAEE020           SKRKAEE020                         95.7580  -107.4420  180.0000  top
+U1        AP2112K-3.3          SOT-23-5                          212.7195   -86.4260    0.0000  top
+U2        MCP73831/OT          SOT-23-5                          221.2395   -83.1190    0.0000  top
+U7        ESP32-S3-WROOM-1     ESP32-S3-WROOM-1                   84.9190   -94.1200   90.0000  top
+## End
