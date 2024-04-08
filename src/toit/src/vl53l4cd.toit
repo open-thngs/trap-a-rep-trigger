@@ -28,6 +28,17 @@ class VL53L4CD:
     xshut-pin_.set 1
     driver_.init
 
+  disable:
+    //TODO disable interrupts
+    driver_.disable
+    xshut-pin_.set 0
+    sleep --ms=3
+
+  reset:
+    disable
+    xshut-pin_.set 1
+    sleep --ms=10
+
   get-id -> ByteArray:
     return driver_.get-model-id
 

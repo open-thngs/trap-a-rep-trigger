@@ -22,6 +22,9 @@ class VL53L4CD-DRIVER:
     device_ = bus.device I2C-ADDRESS-DEFAULT
     set-i2c-address i2c-address_
 
+  disable:
+    device_.close
+
   start-vhv:
     write_ SYSTEM_START #[0x40]
 
