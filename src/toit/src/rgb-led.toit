@@ -40,6 +40,11 @@ class RGBLED:
     assert: 0 <= brightness <= 100
     brightness_ = brightness / 100.0
     apply-color
+
+  close:
+    red_channel.stop
+    green_channel.stop
+    blue_channel.stop
     
   red:
     set-color 255 0 0

@@ -3,17 +3,15 @@ import ble show BLE_CONNECT_MODE_UNDIRECTIONAL
 import uuid show Uuid
 import .command
 import log
-// import .api_service_client show ApiClient
 import .api_service_provider show ApiServiceProvider
 import monitor
 
 DEVICE_SERVICE_UUID ::= BleUuid "C532" //Custom UUID
 COMMAND_CHARACTERISTIC_UUID ::= BleUuid "C540" //Custom UUID
 
-// api/ApiClient:=?
-
 command_characteristic/LocalCharacteristic := ?
 
+command-channel := monitor.Channel 2
 provider/ApiServiceProvider := ?
 device-name := "RepTrap"
 
@@ -42,12 +40,15 @@ run_ble_service:
       --connectable=true
       --service_classes=[DEVICE_SERVICE_UUID]
 
-  task:: command-receiver-task
+  receiver-task := task:: command-receiver-task
 
   logger.debug "Advertising: $DEVICE_SERVICE_UUID with name $device_name"
 
   while true:
-    sleep --ms=10000
+    command := command-channel.receive --blocking=true
+    if command == Command.STOP:
+      receiver-task.cancel
+      break
 
 command-receiver-task:
   while true:
@@ -63,6 +64,9 @@ handle-command command:
   else if command == Command.CALIBRATE:
     logger.debug "Calibrate command received"
     provider.calibrate 
+  else if command == Command.STOP:
+    logger.debug "Stop command received"
+    
 
   else:
     logger.debug "Unknown command received: $command"

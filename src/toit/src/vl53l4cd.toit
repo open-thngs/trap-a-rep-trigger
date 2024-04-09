@@ -14,30 +14,28 @@ class VL53L4CD:
   name := ?
   driver_/VL53L4CD-DRIVER? := ?
   xshut-pin_/gpio.Pin? := ?
-  interrupt-pin_/gpio.Pin? := ?
   i2caddr_ := ?
   is-first-interrupt := true
 
-  constructor .bus_ .name/string xshut_pin/int interrupt_pin/int .i2caddr_=41 --low-power/bool --debug=false:
+  constructor .bus_ .name/string xshut_pin/int .i2caddr_=41 --low-power/bool --debug=false:
     driver_ = VL53L4CD-DRIVER bus_ i2caddr_ debug
     xshut-pin_ = gpio.Pin.out xshut_pin
-    xshut-pin_.set 0
-    interrupt-pin_ = gpio.Pin.in interrupt_pin
 
   init:
     xshut-pin_.set 1
     driver_.init
 
+  enable:
+    xshut-pin_.set 1
+    sleep --ms=3
+
   disable:
-    //TODO disable interrupts
-    driver_.disable
     xshut-pin_.set 0
     sleep --ms=3
 
   reset:
     disable
-    xshut-pin_.set 1
-    sleep --ms=10
+    enable
 
   get-id -> ByteArray:
     return driver_.get-model-id
