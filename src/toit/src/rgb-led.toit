@@ -42,9 +42,9 @@ class RGBLED:
     apply-color
 
   close:
-    red_channel.stop
-    green_channel.stop
-    blue_channel.stop
+    red_channel.close
+    green_channel.close
+    blue_channel.close
     
   red:
     set-color 255 0 0

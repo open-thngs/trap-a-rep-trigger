@@ -10,6 +10,7 @@ import .ble.command
 import log
 import monitor
 import .sensor-manager show SensorManager
+import .sensor-manager show PIN-MASK
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
 command-channel := monitor.Channel 1
@@ -21,9 +22,10 @@ led := ?
 is-ble-available := false
 
 main:
-  log.debug "Starting VL53L4CD Sensor Array $esp32.reset-reason"
-  log.debug "Wakeup cause: $esp32.wakeup-cause"
-  if esp32.reset-reason == esp32.ESP-RST-EXT:
+  logger.debug "Starting VL53L4CD Sensor Array $esp32.reset-reason"
+  logger.debug "Wakeup cause: $esp32.wakeup-cause"
+  logger.debug "extracted Pins: $(extract-pins (esp32.ext1-wakeup-status PIN-MASK))"
+  if esp32.wakeup-cause == esp32.WAKEUP-EXT1:
     return
 
   led = RGBLED 14 13 12
@@ -47,6 +49,13 @@ blink:
     sleep --ms=250
     led.off
     sleep --ms=250
+
+extract_pins mask/int -> List:
+  pins := []
+  21.repeat:
+    if mask & (1 << it) != 0:
+      pins.add it
+  return pins
 
 handle-command:
   command := command-channel.receive --blocking=true
@@ -82,5 +91,5 @@ calibrate:
   blink
 
 deep-sleep:
-  // esp32.enable-external-wakeup ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << VL53-INT-4)) false
+  esp32.enable-external-wakeup PIN-MASK false
   esp32.deep-sleep (Duration --m=1)

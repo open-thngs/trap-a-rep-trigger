@@ -14,19 +14,21 @@ VL53_INT_4      ::= 7
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="trigger"
 
-pin-mask := ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << VL53-INT-4))
+pin-mask := ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << VL53-INT-4) | (1 << 9))
 
 main:
   logger.debug "Wakeup cause: $esp32.wakeup-cause"
   logger.debug "Wakeup status $(esp32.ext1-wakeup-status pin-mask)"
   logger.debug "extracted Pins: $(extract-pins (esp32.ext1-wakeup-status pin-mask))"
   if esp32.wakeup-cause == 0:
+    sleep --ms=5000
     return
 
-  exception := catch: 
-    sensor-manager := SensorManager
+  exception := catch --trace: 
     trigger := CameraTrigger
     trigger.run
+    sensor-manager := SensorManager
+    sensor-manager.init-all
     sensor-manager.clear-interrupts
   if exception:
     logger.debug "Error: Ignored trigger"
@@ -50,6 +52,7 @@ class CameraTrigger:
       focus.set 1
       sleep --ms=2
       shutter.set 1
+      logger.debug "time needed: $Time.monotonic-us"
       sleep --ms=250
       logger.debug "Camera has been triggered"
       shutter.set 0

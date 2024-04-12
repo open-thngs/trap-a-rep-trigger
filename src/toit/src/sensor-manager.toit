@@ -23,6 +23,8 @@ VL53_ADDR_4   ::= 45
 VL53_XSHUNT_4 ::= 8
 VL53_INT_4    ::= 7
 
+PIN-MASK ::= ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << VL53-INT-4))
+
 class SensorManager:
 
   sensor-array := ?
@@ -43,6 +45,10 @@ class SensorManager:
     vl53-4 := VL53L4CD bus "VL53_4" VL53_XSHUNT_4 VL53_ADDR_4 --debug=debugging --low-power=true
     sensor-array = [vl53_1, vl53_2, vl53_3, vl53_4]
   
+  init-all:
+    sensor-array.do: |sensor|
+      sensor.init
+
   close:
     bus.close
 
@@ -55,14 +61,18 @@ class SensorManager:
       sensor.enable
 
   calibrate-and-start:
+    disable-all
     sensor-array.do: |sensor|
-      sensor.init
+      sensor.enable
+      sensor.apply-i2c-address
+
     sensor-array.do: |sensor|
       print "---------- $sensor.name ------------"
       sensor.start-temperature-update
       apply_sensor_cfg sensor bucket
       threashold-mm := sensor.get-height-trigger-threshold 30 10
       sensor.set-mode MODE-LOW-POWER
+      sensor.set-interrupt-polarity 0
       sensor.set-signal-threshold 5000
       print "Signal Threashold: $sensor.get-signal-threshold"
       sensor.set-sigma-threshold 10

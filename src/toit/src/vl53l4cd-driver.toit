@@ -19,8 +19,12 @@ class VL53L4CD-DRIVER:
   constructor .bus .i2c-address_=I2C-ADDRESS-DEFAULT .debug=false:
     
   init:
+    device_ = bus.device i2c-address_
+    if not device_:
+      throw "Failed to initialize VL53L4CD sensor"
+  
+  init-default:
     device_ = bus.device I2C-ADDRESS-DEFAULT
-    set-i2c-address i2c-address_
 
   disable:
     device_.close
@@ -81,6 +85,11 @@ class VL53L4CD-DRIVER:
   get-interrupt-polarity -> int:
     value := (read_ GPIO-HV-MUX-CTRL)[0] & 0x10
     return (~(value >> 4) & 0x01) & 0x01 //will be either 0 or 1
+
+  set-interrupt-polarity polarity:
+    value := (read_ GPIO-HV-MUX-CTRL)[0] & 0xEF
+    value |= (polarity << 4)
+    write_ GPIO-HV-MUX-CTRL #[value]
 
   get-timing-budget -> int:
     osc-freq := (unpack-16 (read_ #[0x00, 0x06] --length=2))

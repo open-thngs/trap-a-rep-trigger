@@ -14,18 +14,18 @@ class VL53L4CD:
   name := ?
   driver_/VL53L4CD-DRIVER? := ?
   xshut-pin_/gpio.Pin? := ?
-  i2caddr_ := ?
+  i2caddr := ?
   is-first-interrupt := true
 
-  constructor .bus_ .name/string xshut_pin/int .i2caddr_=41 --low-power/bool --debug=false:
-    driver_ = VL53L4CD-DRIVER bus_ i2caddr_ debug
-    xshut-pin_ = gpio.Pin.out xshut_pin
+  constructor .bus_ .name/string xshut_pin/int .i2caddr=41 --low-power/bool --debug=false:
+    driver_ = VL53L4CD-DRIVER bus_ i2caddr debug
+    xshut-pin_ = gpio.Pin xshut_pin --open-drain
 
   init:
-    xshut-pin_.set 1
     driver_.init
 
   enable:
+    xshut-pin_.configure --output=true
     xshut-pin_.set 1
     sleep --ms=3
 
@@ -36,6 +36,10 @@ class VL53L4CD:
   reset:
     disable
     enable
+
+  apply-i2c-address:
+    driver_.init-default
+    driver_.set-i2c-address i2caddr
 
   get-id -> ByteArray:
     return driver_.get-model-id
@@ -107,6 +111,9 @@ class VL53L4CD:
 
   get-interrupt-polarity:
     return driver_.get-interrupt-polarity
+
+  set-interrupt-polarity polarity:
+    driver_.set-interrupt-polarity polarity
 
   get-signal-threshold -> int:
     return driver_.get-signal-threshold
