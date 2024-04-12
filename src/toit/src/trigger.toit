@@ -2,6 +2,7 @@ import gpio
 import log
 import esp32
 import i2c
+import artemis
 
 import .rgb-led show RGBLED
 import .vl53l4cd
@@ -20,16 +21,23 @@ main:
   logger.debug "Wakeup cause: $esp32.wakeup-cause"
   logger.debug "Wakeup status $(esp32.ext1-wakeup-status pin-mask)"
   logger.debug "extracted Pins: $(extract-pins (esp32.ext1-wakeup-status pin-mask))"
+  trigger := artemis.Container.current.trigger
+  if trigger and trigger is artemis.TriggerPin:
+    logger.debug "Trigger: $trigger on pin $((trigger as artemis.TriggerPin).pin)"
+    if trigger.kind == artemis.Trigger.KIND_PIN:
+      logger.debug "Pin: $((trigger as artemis.TriggerPin).pin)"
+
   if esp32.wakeup-cause == 0:
     sleep --ms=5000
     return
 
   exception := catch --trace: 
-    trigger := CameraTrigger
-    trigger.run
+    cam-trigger := CameraTrigger
+    cam-trigger.run
     sensor-manager := SensorManager
     sensor-manager.init-all
     sensor-manager.clear-interrupts
+    
   if exception:
     logger.debug "Error: Ignored trigger"
 

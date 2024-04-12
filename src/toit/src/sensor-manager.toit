@@ -65,6 +65,7 @@ class SensorManager:
     sensor-array.do: |sensor|
       sensor.enable
       sensor.apply-i2c-address
+      sensor.clear-interrupt
 
     sensor-array.do: |sensor|
       print "---------- $sensor.name ------------"
@@ -72,7 +73,6 @@ class SensorManager:
       apply_sensor_cfg sensor bucket
       threashold-mm := sensor.get-height-trigger-threshold 30 10
       sensor.set-mode MODE-LOW-POWER
-      sensor.set-interrupt-polarity 0
       sensor.set-signal-threshold 5000
       print "Signal Threashold: $sensor.get-signal-threshold"
       sensor.set-sigma-threshold 10

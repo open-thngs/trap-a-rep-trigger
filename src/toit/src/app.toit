@@ -41,6 +41,10 @@ main:
   
   led.close
   sensor-manager.close
+
+  // while true:
+    // logger.debug "I don't want to sleep yyet"
+    // sleep --ms=10000
   // deep-sleep
 
 blink:

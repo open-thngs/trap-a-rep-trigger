@@ -19,7 +19,7 @@ class VL53L4CD:
 
   constructor .bus_ .name/string xshut_pin/int .i2caddr=41 --low-power/bool --debug=false:
     driver_ = VL53L4CD-DRIVER bus_ i2caddr debug
-    xshut-pin_ = gpio.Pin xshut_pin --open-drain
+    xshut-pin_ = gpio.Pin xshut_pin
 
   init:
     driver_.init
