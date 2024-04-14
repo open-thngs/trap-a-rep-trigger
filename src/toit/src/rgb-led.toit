@@ -12,7 +12,7 @@ class RGBLED:
   blue_/float := 1.0
   brightness_/float := 1.0
 
-  constructor r=5 g=6 b=7:
+  constructor r=14 g=13 b=12:
     generator := pwm.Pwm --frequency=2050
     red := Pin r --output=true 
     green := Pin g --output=true
