@@ -1,6 +1,19 @@
+sdk: ^2.0.0-alpha.79
 prefixes:
+  artemis: toit-artemis
+  http: pkg-http
   ringbuffer: toit-ringbuffer
 packages:
+  pkg-http:
+    url: github.com/toitlang/pkg-http
+    name: http
+    version: 2.6.0
+    hash: 97bdea9f0f0c78bd41d85d8ac071527caa76b09d
+  toit-artemis:
+    url: github.com/toitware/toit-artemis
+    name: artemis
+    version: 0.8.3
+    hash: c65898c512ec79173b523add1c8d13ec203b6e7e
   toit-ringbuffer:
     url: github.com/informaticore/toit-ringbuffer
     name: ringbuffer

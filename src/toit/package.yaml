@@ -1,4 +1,10 @@
 dependencies:
+  artemis:
+    url: github.com/toitware/toit-artemis
+    version: ^0.8.3
+  http:
+    url: github.com/toitlang/pkg-http
+    version: ^2.6.0
   ringbuffer:
     url: github.com/informaticore/toit-ringbuffer
     version: ^1.0.3
