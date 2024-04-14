@@ -2,11 +2,12 @@ import gpio
 import log
 import esp32
 import i2c
-import artemis
+// import artemis
 
 import .rgb-led show RGBLED
 import .vl53l4cd
 import .sensor-manager show SensorManager
+import .sensor-manager show PIN-MASK
 
 VL53_INT_1      ::= 21
 VL53_INT_2      ::= 18
@@ -21,15 +22,16 @@ main:
   logger.debug "Wakeup cause: $esp32.wakeup-cause"
   logger.debug "Wakeup status $(esp32.ext1-wakeup-status pin-mask)"
   logger.debug "extracted Pins: $(extract-pins (esp32.ext1-wakeup-status pin-mask))"
-  trigger := artemis.Container.current.trigger
-  if trigger and trigger is artemis.TriggerPin:
-    logger.debug "Trigger: $trigger on pin $((trigger as artemis.TriggerPin).pin)"
-    if trigger.kind == artemis.Trigger.KIND_PIN:
-      logger.debug "Pin: $((trigger as artemis.TriggerPin).pin)"
+  //TODO do not run if the main app is running
+  // trigger := artemis.Container.current.trigger
+  // if trigger and trigger is artemis.TriggerPin:
+  //   logger.debug "Trigger: $trigger on pin $((trigger as artemis.TriggerPin).pin)"
+  //   if trigger.kind == artemis.Trigger.KIND_PIN:
+  //     logger.debug "Pin: $((trigger as artemis.TriggerPin).pin)"
 
-  if esp32.wakeup-cause == 0:
-    sleep --ms=5000
-    return
+  // if esp32.wakeup-cause == 0:
+  //   sleep --ms=5000
+  //   return
 
   exception := catch --trace: 
     cam-trigger := CameraTrigger
@@ -40,6 +42,12 @@ main:
     
   if exception:
     logger.debug "Error: Ignored trigger"
+  
+  deep-sleep
+
+deep-sleep:
+  esp32.enable-external-wakeup PIN-MASK false
+  esp32.deep-sleep (Duration --m=1)
 
 extract_pins mask/int -> List:
   pins := []

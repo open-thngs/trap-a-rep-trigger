@@ -7,12 +7,20 @@ class ApiClient extends ServiceClient:
     assert: selector.matches SELECTOR
     super selector
 
-  set_on_trigger_callback callback/Lambda -> none:
+  set-on-trigger-callback callback/Lambda -> none:
     handle := invoke_ ApiService.ON-TRIGGER-INDEX []
     ApiSubscription this handle callback
 
-  set_on_calibrate_callback callback/Lambda -> none:
+  set-on-calibrate-callback callback/Lambda -> none:
     handle := invoke_ ApiService.ON-CALIBRATE-INDEX []
+    ApiSubscription this handle callback
+
+  set-on-calibrate-xtalk-callback callback/Lambda -> none:
+    handle := invoke_ ApiService.ON-CALIBRATE-XTALK-INDEX []
+    ApiSubscription this handle callback
+
+  set-on-stop-callback callback/Lambda -> none:
+    handle := invoke_ ApiService.ON-STOP-INDEX []
     ApiSubscription this handle callback
 
 class ApiSubscription extends ServiceResourceProxy:

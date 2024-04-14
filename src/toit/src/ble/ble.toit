@@ -6,6 +6,7 @@ import log
 import .api_service_provider show ApiServiceProvider
 import monitor
 import esp32
+import gpio
 
 DEVICE_SERVICE_UUID ::= BleUuid "C532" //Custom UUID
 COMMAND_CHARACTERISTIC_UUID ::= BleUuid "C540" //Custom UUID
@@ -18,17 +19,17 @@ device-name := "RepTrap"
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="ble"
 
-main:
+main run:
   logger.debug "BLE Service starting..."
-  pins := extract-pins (esp32.ext1-wakeup-status (1 << 9))
-  logger.debug "extracted Pins: $pins"
-  if esp32.wakeup-cause != esp32.WAKEUP-EXT1 or not pins.contains 9:
-    logger.debug "Not woken up by ext1 or pin 9 not set, returning"
-    return
-
-  provider = ApiServiceProvider
-  provider.install
-  run_ble_service
+  // pins := extract-pins (esp32.ext1-wakeup-status (1 << 9))
+  // logger.debug "extracted Pins: $pins"
+  // if esp32.wakeup-cause != esp32.WAKEUP-EXT1 or not pins.contains 9:
+  //   logger.debug "Not woken up by ext1 or pin 9 not set, returning"
+  //   return
+  if run:
+    provider = ApiServiceProvider
+    provider.install
+    run_ble_service
 
 run_ble_service:
   adapter := Adapter 
@@ -48,6 +49,7 @@ run_ble_service:
       --service_classes=[DEVICE_SERVICE_UUID]
 
   receiver-task := task:: command-receiver-task
+  task:: usb-c-watcher-task
 
   logger.debug "Advertising: $DEVICE_SERVICE_UUID with name $device_name"
 
@@ -81,12 +83,22 @@ handle-command command:
   else if command == Command.STOP:
     logger.debug "Stop command received"
     command-channel.send command
+    provider.stop
+  else if command == Command.XTALK:
+    logger.debug "Xtalk command received"
+    provider.calibrate-xtalk
   else:
     logger.debug "Unknown command received: $command"
 
-extract_pins mask/int -> List:
-  pins := []
-  21.repeat:
-    if mask & (1 << it) != 0:
-      pins.add it
-  return pins
+usb-c-watcher-task:
+  ble-pin := gpio.Pin.in 9
+  ble-pin.wait-for 0
+  command-channel.send Command.STOP
+  provider.stop
+
+// extract_pins mask/int -> List:
+//   pins := []
+//   21.repeat:
+//     if mask & (1 << it) != 0:
+//       pins.add it
+//   return pins

@@ -11,3 +11,9 @@ interface ApiService:
 
   on-calibrate -> services.ServiceResource
   static ON-CALIBRATE-INDEX ::= 1
+
+  on-calibrate-xtalk -> services.ServiceResource
+  static ON-CALIBRATE-XTALK-INDEX ::= 2
+
+  on-stop -> services.ServiceResource
+  static ON-STOP-INDEX ::= 3
