@@ -30,6 +30,8 @@ class VL53L4CD:
     sleep --ms=3
 
   disable:
+    if driver_.device_:
+      driver_.device_.close
     xshut-pin_.set 0
     sleep --ms=3
 
@@ -64,9 +66,7 @@ class VL53L4CD:
       configure-sensor-low-power-mode_
 
   configure-sensor-low-power-mode_:
-    // driver_.dump
     driver_.write_config VL53L4CD-ULTRA-LOW-POWER-CONFIG
-    // driver_.dump
     start_vhv
     driver_.clear_interrupt
     driver_.stop_ranging
@@ -77,9 +77,7 @@ class VL53L4CD:
     driver_.write_ #[0x00,0x4B] #[0x03]
 
   configure-sensor-default-mode_:
-    // driver_.dump
     driver_.write_config VL53L4CD-ULTRA-LITE-DRIVER-CONFIG
-    // driver_.dump
     start_vhv
     driver_.clear_interrupt
     driver_.stop_ranging
