@@ -10,8 +10,10 @@ import gpio
 
 DEVICE_SERVICE_UUID ::= BleUuid "C532" //Custom UUID
 COMMAND_CHARACTERISTIC_UUID ::= BleUuid "C540" //Custom UUID
+STATUS_CHARACTERISTIC_UUID ::= BleUuid "C541" //Custom UUID
 
-command_characteristic/LocalCharacteristic := ?
+command-characteristic/LocalCharacteristic := ?
+device-status-charackteristic/LocalCharacteristic := ?
 
 command-channel := monitor.Channel 2
 provider/ApiServiceProvider := ?
@@ -21,13 +23,9 @@ logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="ble"
 
 main run:
   logger.debug "BLE Service starting..."
-  // pins := extract-pins (esp32.ext1-wakeup-status (1 << 9))
-  // logger.debug "extracted Pins: $pins"
-  // if esp32.wakeup-cause != esp32.WAKEUP-EXT1 or not pins.contains 9:
-  //   logger.debug "Not woken up by ext1 or pin 9 not set, returning"
-  //   return
   if run:
     provider = ApiServiceProvider
+    provider.set-on-device-status-handler on-device-status-change
     provider.install
     run_ble_service
 
@@ -37,7 +35,8 @@ run_ble_service:
   peripheral := adapter.peripheral
 
   service := peripheral.add_service DEVICE_SERVICE_UUID
-  command_characteristic = service.add_write_only_characteristic COMMAND_CHARACTERISTIC_UUID
+  command-characteristic = service.add_write_only_characteristic COMMAND_CHARACTERISTIC_UUID
+  device-status-charackteristic = service.add_notification_characteristic STATUS_CHARACTERISTIC_UUID
 
   service.deploy
 
@@ -96,9 +95,6 @@ usb-c-watcher-task:
   command-channel.send Command.STOP
   provider.stop
 
-// extract_pins mask/int -> List:
-//   pins := []
-//   21.repeat:
-//     if mask & (1 << it) != 0:
-//       pins.add it
-//   return pins
+on-device-status-change := :: | payload/ByteArray |
+  logger.debug "Device status changed: $payload.to-string"
+  device-status-charackteristic.write payload

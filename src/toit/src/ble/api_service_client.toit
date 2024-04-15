@@ -23,6 +23,9 @@ class ApiClient extends ServiceClient:
     handle := invoke_ ApiService.ON-STOP-INDEX []
     ApiSubscription this handle callback
 
+  set-device-status status/ByteArray -> none:
+    invoke_ ApiService.DEVICE-STATUS-INDEX [status]
+
 class ApiSubscription extends ServiceResourceProxy:
   callback/Lambda
   constructor client/ApiClient handle/int .callback:

@@ -6,6 +6,7 @@ class ApiServiceProvider extends ServiceProvider implements ServiceHandler:
   on-calibrate/ApiSubscriptionResource? := null
   on-calibrate-xtalk/ApiSubscriptionResource? := null
   on-stop/ApiSubscriptionResource? := null
+  on-device-status/Lambda? := null
 
   constructor:
     super "api" --major=1 --minor=0
@@ -24,6 +25,8 @@ class ApiServiceProvider extends ServiceProvider implements ServiceHandler:
     else if index == ApiService.ON-STOP-INDEX:
       on-stop = ApiSubscriptionResource this client
       return on-stop
+    else if index == ApiService.DEVICE-STATUS-INDEX:
+      return device-status arguments[0]
     else:
       return null
     unreachable
@@ -39,6 +42,12 @@ class ApiServiceProvider extends ServiceProvider implements ServiceHandler:
 
   stop:
     on-stop.notify_ null
+
+  device-status payload/ByteArray:
+    on-device-status.call payload
+
+  set-on-device-status-handler handler/Lambda:
+    on-device-status = handler
 
 class ApiSubscriptionResource extends ServiceResource:
   provider/ApiServiceProvider

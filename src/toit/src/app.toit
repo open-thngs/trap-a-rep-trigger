@@ -12,8 +12,9 @@ import .ble.api_service_client show ApiClient
 import .ble.command
 import .calibrator as calibrator
 import .sensor-manager show SensorManager
-import .sensor-manager show PIN-MASK
 import .ble.ble as ble-app
+import .utils show deep-sleep
+import .state show State
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
 command-channel := monitor.Channel 1
@@ -26,17 +27,8 @@ is-ble-available := false
 
 main:
   logger.debug "Starting VL53L4CD Sensor Array $esp32.reset-reason"
-  // logger.debug "Wakeup cause: $esp32.wakeup-cause"
-  // logger.debug "extracted Pins: $(extract-pins (esp32.ext1-wakeup-status PIN-MASK))"
-  // if esp32.wakeup-cause == esp32.WAKEUP-EXT1:
-  //   return
   
   try:
-    // ble-pin := gpio.Pin.in 9
-    // if ble-pin.get == 1:
-    //   spawn:: ble-app.main true
-    // ble-pin.close
-
     led = RGBLED
     led.yellow
 
@@ -44,7 +36,8 @@ main:
 
     sensor-manager = SensorManager
     sensor-manager.calibrate-and-start
-    
+    set-status State.RUNNING
+
     while is-ble-available:
       handle-command
 
@@ -52,9 +45,6 @@ main:
     led.close
     sensor-manager.close
 
-  // while true:
-    // logger.debug "I don't want to sleep yyet"
-    // sleep --ms=10000
   deep-sleep
 
 blink:
@@ -64,17 +54,12 @@ blink:
     led.off
     sleep --ms=250
 
-extract_pins mask/int -> List:
-  pins := []
-  21.repeat:
-    if mask & (1 << it) != 0:
-      pins.add it
-  return pins
-
 handle-command:
   command := command-channel.receive --blocking=true
   if command == Command.TRIGGER:
+    led.green
     (CameraTrigger).run
+    led.off
   else if command == Command.CALIBRATE:
     calibrate
   else if command == Command.XTALK:
@@ -112,10 +97,12 @@ init-ble-api -> bool:
 
 calibrate:
   led.yellow
+  set-status State.CALIBRATING
   sensor-manager.disable-all
   sensor-manager.calibrate-and-start
+  set-status State.RUNNING
   blink
 
-deep-sleep:
-  esp32.enable-external-wakeup PIN-MASK false
-  esp32.deep-sleep (Duration --m=1)
+set-status status:
+  if is-ble-available:
+    api.set-device-status status.to-byte-array

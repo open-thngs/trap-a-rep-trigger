@@ -17,3 +17,6 @@ interface ApiService:
 
   on-stop -> services.ServiceResource
   static ON-STOP-INDEX ::= 3
+
+  device-status status/ByteArray -> none
+  static DEVICE-STATUS-INDEX ::= 4
