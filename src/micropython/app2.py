@@ -1,4 +1,4 @@
-from machine import I2C, Pin
+from machine import I2C, Pin, deepsleep
 import machine
 import micropython
 from micropython import const
