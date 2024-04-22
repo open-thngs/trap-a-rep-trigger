@@ -1,3 +1,4 @@
+name: "Toit Firmware Generation"
 on:
   workflow_dispatch:
   push:
@@ -7,14 +8,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TOIT_VERSION: "v2.0.0-alpha.145"
     steps:
       - uses: actions/checkout@v4
       - uses: toitlang/action-setup@v1
         with:
-          toit-version: "v2.0.0-alpha.145"
+          toit-version: ${{ env.TOIT_VERSION }}
       - name: Download and unpack envelope
         run: |
-          wget https://github.com/toitlang/envelopes/releases/download/${{ steps.setup.outputs.toit-version }}/firmware-esp32s2.envelope.gz
+          wget https://github.com/toitlang/envelopes/releases/download/${{ env.TOIT_VERSION }}/firmware-esp32s2.envelope.gz
           gunzip firmware-esp32s2.envelope.gz
       - name: Build toit firmware
         run: |
