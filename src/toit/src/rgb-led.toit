@@ -75,7 +75,7 @@ class RGBLED:
     set-color 0 255 255
 
   yellow:
-    set-color 255 255 0
+    set-color 255 200 0
 
   off:
     set-color 0 0 0

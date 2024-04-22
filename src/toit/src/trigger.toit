@@ -22,12 +22,13 @@ main:
   //TODO do not run if the main app is running
 
   exception := catch --trace: 
+    // rgb-led.green
     cam-trigger := CameraTrigger
     cam-trigger.run
     sensor-manager := SensorManager
     sensor-manager.init-all
     sensor-manager.clear-interrupts
-    
+    // rgb-led.off
   if exception:
     logger.debug "Error: Ignored trigger"
   

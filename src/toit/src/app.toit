@@ -9,12 +9,12 @@ import .vl53l4cd
 import .rgb-led show RGBLED
 import .trigger show CameraTrigger
 import .ble.api_service_client show ApiClient
-import .ble.command
+import .ble.bluetooth show Command
 import .calibrator as calibrator
 import .sensor-manager show SensorManager
-import .ble.ble as ble-app
+import .ble.bluetooth as ble-app
 import .utils show deep-sleep
-import .state show State
+import .ble.bluetooth show State
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
 command-channel := monitor.Channel 1
@@ -35,7 +35,7 @@ main:
 
     sensor-manager = SensorManager
     sensor-manager.calibrate-and-start
-    set-status State.RUNNING
+    set-status State.READY
 
     while is-ble-available:
       handle-command
@@ -99,9 +99,9 @@ calibrate:
   set-status State.CALIBRATING
   sensor-manager.disable-all
   sensor-manager.calibrate-and-start
-  set-status State.RUNNING
+  set-status State.READY
   blink
 
 set-status status:
   if is-ble-available:
-    api.set-device-status status.to-byte-array
+    api.set-device-status status
