@@ -1,14 +1,29 @@
 on:
   workflow_dispatch:
   push:
-    branches:
-    - main
+    tags:
+      - '*'
 
-steps:
-  - uses: actions/checkout@v4
-  - uses: toitlang/action-setup@v1
-  - run: 
-    - toit.compile -w komodo.snapshot src/toit/src/komodo.toit
-    - firmware -e firmware-esp32s3.envelope container install komodo komodo.snapshot
-
-            
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: toitlang/action-setup@v1
+        with:
+          toit-version: "v2.0.0-alpha.145"
+      - name: Download and unpack envelope
+        run: |
+          wget https://github.com/toitlang/envelopes/releases/download/${{ steps.setup.outputs.toit-version }}/firmware-esp32s2.envelope.gz
+          gunzip firmware-esp32s2.envelope.gz
+      - name: Build toit firmware
+        run: |
+          toit compile -w komodo.snapshot src/toit/src/komodo.toit
+          firmware -e firmware-esp32s2.envelope container install komodo komodo.snapshot
+      - name: Pack envelope
+        run: gzip firmware-esp32s2.envelope
+      - name: Upload envelope
+        uses: actions/upload-artifact@v2
+        with:
+          name: firmware-esp32s2.envelope.gz
+          path: firmware-esp32s2.envelope.gz
