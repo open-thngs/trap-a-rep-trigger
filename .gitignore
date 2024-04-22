@@ -44,3 +44,4 @@ pcb/~rep-trap-pcb.kicad_pcb.lck
 *.lck
 
 src/toit/.packages/
+src/.packages/

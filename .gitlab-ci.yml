@@ -1,4 +1,0 @@
-include:
- - local: .gitlab/kibot.yml
-# - local: .gitlab/platformio.yml
-# - local: .gitlab/reuse.yml
