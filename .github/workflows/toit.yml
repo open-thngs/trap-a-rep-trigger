@@ -21,6 +21,7 @@ jobs:
           gunzip firmware-esp32s2.envelope.gz
       - name: Build toit firmware
         run: |
+          jag pkg install
           toit.compile -w komodo.snapshot src/toit/src/komodo.toit
           firmware -e firmware-esp32s2.envelope container install komodo komodo.snapshot
       - name: Pack envelope
