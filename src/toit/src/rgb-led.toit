@@ -1,11 +1,15 @@
 import gpio show Pin
-import gpio.pwm
+import gpio.pwm show Pwm PwmChannel
 
 class RGBLED:
   
-  red_channel := ?
-  green_channel := ?
-  blue_channel := ?
+  red-pin/Pin := ?
+  green-pin/Pin := ?
+  blue-pin/Pin := ?
+
+  red_channel/PwmChannel := ?
+  green_channel/PwmChannel := ?
+  blue_channel/PwmChannel := ?
 
   red_/float := 1.0
   green_/float := 1.0
@@ -13,13 +17,13 @@ class RGBLED:
   brightness_/float := 1.0
 
   constructor r=14 g=13 b=12:
-    generator := pwm.Pwm --frequency=2050
-    red := Pin r --output=true 
-    green := Pin g --output=true
-    blue := Pin b --output=true
-    red_channel = generator.start red
-    green_channel = generator.start green
-    blue_channel = generator.start blue
+    generator := Pwm --frequency=2050
+    red-pin = Pin r --output=true 
+    green-pin = Pin g --output=true
+    blue-pin = Pin b --output=true
+    red_channel = generator.start red-pin
+    green_channel = generator.start green-pin
+    blue_channel = generator.start blue-pin
 
   set-color red/int green/int blue/int:
     assert: 0 <= red <= 255
@@ -45,6 +49,9 @@ class RGBLED:
     red_channel.close
     green_channel.close
     blue_channel.close
+    red-pin.close
+    green-pin.close
+    blue-pin.close
     
   red:
     set-color 255 0 0

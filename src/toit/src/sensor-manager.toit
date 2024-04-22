@@ -28,15 +28,19 @@ PIN-MASK ::= ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << 
 class SensorManager:
 
   sensor-array := ?
+  sda := ?
+  scl := ?
   bus := ?
   bucket := ?
 
   constructor:  
     bucket = storage.Bucket.open --flash "sensor-cfg"
 
+    sda = gpio.Pin 38
+    scl = gpio.Pin 48
     bus = i2c.Bus
-      --sda=gpio.Pin 38
-      --scl=gpio.Pin 48
+      --sda=sda
+      --scl=scl
     
     debugging := false
     vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53_ADDR_1 --debug=debugging --low-power=true
@@ -49,8 +53,15 @@ class SensorManager:
     sensor-array.do: |sensor|
       sensor.init
 
+  scan:
+    devices := bus.scan
+    print "Devices: $devices" 
+
   close:
     bus.close
+    bus = null
+    sda.close
+    scl.close
 
   disable-all:
     sensor-array.do: |sensor|

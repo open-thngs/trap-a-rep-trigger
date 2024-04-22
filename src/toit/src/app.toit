@@ -18,10 +18,9 @@ import .state show State
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
 command-channel := monitor.Channel 1
-sensor-manager := ?
+sensor-manager/SensorManager := ?
 api/ApiClient:=?
 sensor-array := []
-bucket := ?
 led := ?
 is-ble-available := false
 
@@ -63,7 +62,7 @@ handle-command:
   else if command == Command.CALIBRATE:
     calibrate
   else if command == Command.XTALK:
-    spawn:: calibrator.main
+    calibrator.calibrate-xtalk sensor-manager led
   else if command == Command.STOP:
     is-ble-available = false
   else:

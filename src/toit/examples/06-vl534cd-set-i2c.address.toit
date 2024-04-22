@@ -1,6 +1,6 @@
 import i2c
 import gpio
-import ..vl53l4cd show VL53L4CD
+import ..src.vl53l4cd show VL53L4CD
 
 VL53_ADDR_1 ::= 42
 VL53_XSHUNT_1 ::= 47

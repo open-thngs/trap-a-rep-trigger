@@ -5,26 +5,37 @@ import .vl53l4cd
 import system.storage
 import .sensor-manager show SensorManager
 
+CALIBRATION-TARGET-DISTANCE ::= 100
+CALIBRATION-SMPLES ::= 30
+
+led := ?
+sensor-manager := ?
+
 main:
-  debugging := false
-  last_temperature := 0
-  led := RGBLED
+  led = RGBLED
   led.green
 
-  shutter := gpio.Pin 11 --output=true
-  focus := gpio.Pin 10 --output=true
+  sensor-manager = SensorManager
+  calibrate-xtalk sensor-manager led
+
+calibrate-xtalk sensor-manager led:
+  debugging := false
+  last_temperature := 0
 
   bucket := storage.Bucket.open --flash "sensor-cfg"
 
-  sensor-manager := SensorManager
   print "Calibration started..."
   led.yellow
   print "Initialising sensors"
-  sensor-manager.init-all
+  sensor-manager.disable-all
+  sensor-manager.sensor-array.do: |sensor|
+    sensor.enable
+    sensor.apply-i2c-address
+    sensor.clear-interrupt
   sensor-manager.sensor-array.do: |sensor|
       print "Calibrating sensor: $sensor.name"
-      offset := sensor.calibrate_offset 100 30
-      xtalk := sensor.calibrate_xtalk 100 30
+      offset := sensor.calibrate_offset CALIBRATION-TARGET-DISTANCE CALIBRATION-SMPLES
+      xtalk := sensor.calibrate_xtalk CALIBRATION-TARGET-DISTANCE CALIBRATION-SMPLES
       bucket[sensor.name+"-offset"] = offset
       bucket[sensor.name+"-xtalk"] = xtalk
 

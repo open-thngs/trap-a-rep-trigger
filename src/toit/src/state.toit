@@ -1,4 +1,4 @@
 class State:
-  static RUNNING ::= "Running"
+  static RUNNING ::= "running"
   static CALIBRATING ::= "calibrating"
   static XTALK ::= "xtalk"

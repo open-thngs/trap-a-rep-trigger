@@ -197,6 +197,7 @@ class VL53L4CD:
     return threshold.to-int
 
   calibrate-offset target-distance-mm nb-samples:
+    print "Calibrating offset"
     if (nb-samples < 5 or nb-samples > 255) or (target-distance-mm < 10 or target-distance-mm > 1000):
       throw "Invalid offset calibration parameters"
 
@@ -205,11 +206,13 @@ class VL53L4CD:
     start-ranging
 
     distances := ringbuffer.RingBuffer nb-samples
+    distance := 0.0
     nb-samples.repeat:
       while not driver_.is-data-ready:
         sleep --ms=1
-
-      distances.append (driver_.get-distance).to-float
+      
+      distance = (driver_.get-distance).to-float
+      distances.append distance
       driver_.clear-interrupt
     
     stop-ranging
@@ -264,7 +267,8 @@ class VL53L4CD:
 
     //* 127kcps is the max Xtalk value (65536/512) */
     if(xtalk_kcps > 127.0):
-        throw "Xtalk compensation failed"
+      xtalk_kcps = 127.0
+      print "ERROR: Xtalk compensation value is higher then 127 failed"
     
     driver_.set-cross-talk xtalk-kcps.to-int
     return xtalk_kcps
@@ -280,6 +284,7 @@ class VL53L4CD:
     result.ambient-rate-kcps = driver_.get-result-ambient-rate
     result.sigma-mm = driver_.get-result-sigma
     result.distance-mm = driver_.get-result-distance
+    print "distance: $result.distance-mm"
     result.signal-per-spad-kcps = result.signal-rate-kcps / result.number-of-spad
     result.ambient-per-spad-kcps = result.ambient-rate-kcps / result.number-of-spad
 

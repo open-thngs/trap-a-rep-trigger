@@ -1,5 +1,0 @@
-prefixes:
-  app: ..
-packages:
-  ..:
-    path: ..

@@ -41,10 +41,10 @@ class CameraTrigger:
       focus := gpio.Pin 10 --output=true
 
       focus.set 1
-      sleep --ms=2
+      sleep --ms=10
       shutter.set 1
       logger.debug "time needed: $Time.monotonic-us"
-      sleep --ms=250
+      sleep --ms=500
       logger.debug "Camera has been triggered"
       shutter.set 0
       focus.set 0
