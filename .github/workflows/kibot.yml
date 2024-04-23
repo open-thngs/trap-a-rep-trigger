@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     tags:        
-      - '**'
+      - 'pcb*'
     paths:
       - pcb/**
 
