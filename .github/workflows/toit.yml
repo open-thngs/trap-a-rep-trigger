@@ -1,9 +1,9 @@
 name: "Toit Firmware Generation"
 on:
   workflow_dispatch:
-  release:
-    types:
-      - created
+  push:
+    tags:
+      - 'firmware*'
 
 jobs:
   build:
