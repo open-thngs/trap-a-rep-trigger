@@ -34,3 +34,25 @@ jobs:
         with:
           name: ${{env.FIRMWARE_FILE}}.bin
           path: src/toit/${{env.FIRMWARE_FILE}}.bin
+
+      - name: Get release
+        id: get_release
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const release = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: context.ref.replace('refs/tags/', '')
+            });
+            return release.data.upload_url;
+        if: github.event_name == 'release'
+
+      - name: Upload firmware to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.get_release.outputs.result }}
+          asset_path: src/toit/${{ env.FIRMWARE_FILE }}.bin
+          asset_name: ${{ env.FIRMWARE_FILE }}.zip
+          asset_content_type: application/zip
+        if: github.event_name == 'release'
