@@ -10,24 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TOIT_VERSION: "v2.0.0-alpha.145"
+      ENVELOPE_FILE: "firmware-esp32s3"
+      FIRMWARE_FILE: "heimdall-esp32s3"
     steps:
       - uses: actions/checkout@v4
       - uses: toitlang/action-setup@v1
         with:
           toit-version: ${{ env.TOIT_VERSION }}
       - name: Download and unpack envelope
+        working-directory: src/toit
         run: |
-          wget https://github.com/toitlang/envelopes/releases/download/${{ env.TOIT_VERSION }}/firmware-esp32s2.envelope.gz
-          gunzip firmware-esp32s2.envelope.gz
+          wget https://github.com/toitlang/envelopes/releases/download/${{ env.TOIT_VERSION }}/${{ env.ENVELOPE_FILE }}.envelope.gz
+          gunzip ${{ env.ENVELOPE_FILE }}.envelope.gz
       - name: Build toit firmware
+        working-directory: src/toit
         run: |
-          jag pkg install
-          toit.compile -w komodo.snapshot src/toit/src/komodo.toit
-          firmware -e firmware-esp32s2.envelope container install komodo komodo.snapshot
-      - name: Pack envelope
-        run: gzip firmware-esp32s2.envelope
+          toit.pkg install
+          toit.compile -w komodo.snapshot src/komodo.toit
+          ${{env.TOIT_INSTALL_DIR}}/toit/tools/firmware -e ${{ env.ENVELOPE_FILE }}.envelope container install komodo komodo.snapshot
+          ${{env.TOIT_INSTALL_DIR}}/toit/tools/firmware extract -e ${{ env.ENVELOPE_FILE }}.envelope -o ${{env.FIRMWARE_FILE}}.bin
       - name: Upload envelope
         uses: actions/upload-artifact@v2
         with:
-          name: firmware-esp32s2.envelope.gz
-          path: firmware-esp32s2.envelope.gz
+          name: ${{env.FIRMWARE_FILE}}.bin
+          path: src/toit/${{env.FIRMWARE_FILE}}.bin

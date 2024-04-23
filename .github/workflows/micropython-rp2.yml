@@ -1,4 +1,4 @@
-name: "Firmware Generator"
+name: "Micropython Firmware Generator (RP2)"
 on:
   workflow_dispatch:
   push:
