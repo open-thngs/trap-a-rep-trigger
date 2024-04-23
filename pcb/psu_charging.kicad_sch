@@ -1704,6 +1704,11 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid d86975ac-f17b-41c4-b67f-eceb6674d90b)
   )
+  (text "Change from Voltage-Divider \nto use one GND of USB"
+    (at 215.9 146.05 0)
+    (effects (font (size 3 3) (thickness 0.6) bold (color 255 0 0 1)) (justify left bottom))
+    (uuid f7b97a99-833a-4583-a30b-b58063572504)
+  )
 
   (label "VBUS_DETECT" (at 45.72 25.4 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right bottom))
@@ -1802,7 +1807,7 @@
     (property "Datasheet" "" (at 118.11 171.45 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d51114c5-63af-4fd9-bad0-17aa29c900fb))
+    (pin "1" (uuid c30b7c8b-a5f4-4141-977a-826dec457aa9))
     (instances
       (project "trick-tracker"
         (path "/a8447faf-e0a0-4c4a-ae53-4d4b28669151"
@@ -1952,7 +1957,7 @@
     (property "Datasheet" "" (at 204.47 120.65 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid daf7692e-a885-4398-bdc7-d176e1c9b242))
+    (pin "1" (uuid 4d11582e-1c94-4fea-8ebb-b7ed696edbea))
     (instances
       (project "rep-trap-pcb"
         (path "/b363dc8f-4a45-4779-a397-ccb82393dab8/eebb1d37-a01d-4adf-be70-a8e8f9293475/23008b32-6835-495f-a93f-d60d3125c4cb"
@@ -3391,8 +3396,8 @@
     (property "Datasheet" "~" (at 204.47 137.16 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b58cc36c-8f44-4332-b1c4-e7aa92e97cb6))
-    (pin "2" (uuid cfb56d40-c5c4-4123-8af7-6b2caafcc1e3))
+    (pin "1" (uuid 821121c9-038c-47d9-a068-2d8e786e82fa))
+    (pin "2" (uuid 2a5fc9b4-f4b5-4b0f-ae6b-b7b9f558078f))
     (instances
       (project "trick-tracker"
         (path "/a8447faf-e0a0-4c4a-ae53-4d4b28669151"
