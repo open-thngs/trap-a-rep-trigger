@@ -1,9 +1,9 @@
 name: "Toit Firmware Generation"
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
+  release:
+    types:
+      - created
 
 jobs:
   build:
@@ -34,12 +34,3 @@ jobs:
         with:
           name: ${{env.FIRMWARE_FILE}}.bin
           path: src/toit/${{env.FIRMWARE_FILE}}.bin
-      - name: Upload release assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: src/toit/${{env.FIRMWARE_FILE}}.bin
-          asset_name: ${{env.FIRMWARE_FILE}}.zip
-          asset_content_type: application/zip
