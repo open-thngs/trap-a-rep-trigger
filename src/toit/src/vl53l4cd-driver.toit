@@ -56,11 +56,11 @@ class VL53L4CD-DRIVER:
     // print "VL53L4CD[$(i2c-address)]" 
 
   write-config config:
-    // write_ SENSOR-CONFIG config
-    reg := 0x2d
-    config.do: | value |
-      write_ #[reg] #[value]
-      reg += 1
+    write_ SENSOR-CONFIG config
+    // reg := 0x2d
+    // config.do: | value |
+    //   write_ #[reg] #[value]
+    //   reg += 1
 
   read-config:
     config := read_ SENSOR-CONFIG --length=91

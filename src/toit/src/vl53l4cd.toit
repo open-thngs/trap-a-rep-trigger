@@ -172,7 +172,9 @@ class VL53L4CD:
     driver_.stop-ranging
 
   get-height-trigger-threshold intensity=25 percentage=10.0 -> int:
-
+    set-signal-threshold 5000
+    set-sigma-threshold 10
+    set-measure-timings 40 70
     heights := ringbuffer.RingBuffer intensity
     device-heat-loop
     
