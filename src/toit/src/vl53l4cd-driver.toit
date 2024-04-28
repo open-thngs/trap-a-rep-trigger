@@ -1,7 +1,11 @@
 import i2c
+import log
+
 import .constants
 import .struct
 import .config
+
+logger ::= log.Logger log.INFO-LEVEL log.DefaultTarget --name="vl53l4"
 
 class VL53L4CD-DRIVER:
 
@@ -47,14 +51,20 @@ class VL53L4CD-DRIVER:
   set-i2c-address i2c-address/int:
     write_ I2C-SLAVE-DEVICE-ADDRESS #[i2c-address]
     sleep --ms=1
-    old := i2c-address_
-    i2c-address_ = i2c-address
     device_.close
     device_ = bus.device i2c-address_
-    print "I2C address changed from $old to $i2c-address" 
+    // print "VL53L4CD[$(i2c-address)]" 
 
   write-config config:
-    write_ SENSOR-CONFIG config
+    // write_ SENSOR-CONFIG config
+    reg := 0x2d
+    config.do: | value |
+      write_ #[reg] #[value]
+      reg += 1
+
+  read-config:
+    config := read_ SENSOR-CONFIG --length=91
+    config.do: print "0x$(%02x it)"
 
   set-macrop-loop-bound value:
     write_ VHV-CONFIG-TIMEOUT-MACROP-LOOP-BOUND #[value]
@@ -65,10 +75,8 @@ class VL53L4CD-DRIVER:
   start-ranging:
     inter-ms := get-inter-measurement
     if inter-ms != 0:
-      print "Autonomous Mode"
       write_ SYSTEM-START #[0x40]
     else:
-      print "Continuous Mode"
       write_ SYSTEM-START #[0x21]
 
   start-ranging-single-shot:
@@ -168,10 +176,6 @@ class VL53L4CD-DRIVER:
     return (inter-measurment-ms / clock_pll).to-int
 
   set-inter-measurement inter-measurement-ms:
-    timing-bud := get-timing-budget
-    if inter-measurement-ms != 0 and inter-measurement-ms < timing_bud:
-      throw "Inter-measurement period can not be less than timing budget ($timing_bud)"
-
     clock-pll := get-clock-pll
     inter-measurment := INTER-MEASUREMENT-FACTOR * inter-measurement-ms * clock-pll
     write_ INTERMEASUREMENT-MS (pack-32 inter-measurment.to-int)
@@ -245,22 +249,24 @@ class VL53L4CD-DRIVER:
     return (unpack-16 (read_ RESULT_SPAD_NB --length=2)) / 256
   
   get-result-signal-rate:
-      return (unpack-16 (read_ RESULT_SIGNAL_RATE --length=2)) * 8
+    return (unpack-16 (read_ RESULT_SIGNAL_RATE --length=2)) * 8
   
   get-result-ambient-rate:
-      return (unpack-16 (read_ RESULT_AMBIENT_RATE --length=2)) * 8
+    return (unpack-16 (read_ RESULT_AMBIENT_RATE --length=2)) * 8
   
   get-result-sigma:
-      return (unpack-16 (read_ RESULT_SIGMA --length=2)) / 4
+    return (unpack-16 (read_ RESULT_SIGMA --length=2)) / 4
   
   get-result-distance:
-      return (unpack-16 (read_ RESULT_DISTANCE --length=2))
+    return (unpack-16 (read_ RESULT_DISTANCE --length=2))
 
   read_ register/ByteArray --length=1 -> ByteArray:
-    return device_.read-address register length
+    // logger.info "<<READ [$register]"
+    value := device_.read-address register length
+    // sleep --ms=1
+    return value
 
   write_ register/ByteArray data/ByteArray:
+    // logger.info ">>WRITE [$register] [$data]"
     device_.write-address register data
-
-  dump:
-    print "SensorConfig: $(read_ SENSOR_CONFIG --length=91)"
+    // sleep --ms=1

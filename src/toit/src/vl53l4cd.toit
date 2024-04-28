@@ -7,7 +7,7 @@ import ringbuffer
 MODE-DEFAULT := "default"
 MODE-LOW-POWER := "low-power"
 
-THRESHOLD-MAX-VALUE ::= 1500.0
+THRESHOLD-MAX-VALUE ::= 1300.0
 
 class VL53L4CD:
   bus_ := ?
@@ -17,23 +17,26 @@ class VL53L4CD:
   i2caddr := ?
   is-first-interrupt := true
 
-  constructor .bus_ .name/string xshut_pin/int .i2caddr=41 --low-power/bool --debug=false:
+  constructor .bus_ .name/string xshut_pin/int .i2caddr=41 --debug=false:
     driver_ = VL53L4CD-DRIVER bus_ i2caddr debug
     xshut-pin_ = gpio.Pin xshut_pin
 
   init:
     driver_.init
 
+  close:
+    driver_.device_.close
+
   enable:
     xshut-pin_.configure --output=true
     xshut-pin_.set 1
-    sleep --ms=3
+    sleep --ms=10
 
   disable:
     if driver_.device_:
       driver_.device_.close
     xshut-pin_.set 0
-    sleep --ms=3
+    sleep --ms=10
 
   reset:
     disable
@@ -42,6 +45,7 @@ class VL53L4CD:
   apply-i2c-address:
     driver_.init-default
     driver_.set-i2c-address i2caddr
+    print "Sensor $name [0x$(%.2x i2caddr)]"
 
   get-id -> ByteArray:
     return driver_.get-model-id
@@ -66,30 +70,40 @@ class VL53L4CD:
       configure-sensor-low-power-mode_
 
   configure-sensor-low-power-mode_:
-    driver_.write_config VL53L4CD-ULTRA-LOW-POWER-CONFIG
-    start_vhv
-    driver_.clear_interrupt
-    driver_.stop_ranging
-    driver_.set_macrop_loop_bound 0x09
+    wait-for-boot
+    driver_.write-config VL53L4CD-ULTRA-LOW-POWER-CONFIG
+    start-vhv
+    driver_.clear-interrupt
+    driver_.stop-ranging
+    driver_.set-macrop-loop-bound 0x09
     driver_.device_.registers.write-u8 0x0B 0x00
     driver_.write_ #[0x00, 0x24] #[0x05, 0x00]
+
     driver_.device_.registers.write-u8 0x81 0x8a
     driver_.write_ #[0x00,0x4B] #[0x03]
 
   configure-sensor-default-mode_:
-    driver_.write_config VL53L4CD-ULTRA-LITE-DRIVER-CONFIG
-    start_vhv
-    driver_.clear_interrupt
-    driver_.stop_ranging
-    driver_.set_macrop_loop_bound 0x09
+    wait-for-boot
+    driver_.write-config VL53L4CD_ULTRA_LITE_DRIVER_CONFIG
+    start-vhv
+    driver_.clear-interrupt
+    driver_.stop-ranging
+    driver_.set-macrop-loop-bound 0x09
     driver_.device_.registers.write-u8 0x0B 0x00
     driver_.write_ #[0x00, 0x24] #[0x05, 0x00]
-    set_measure_timings 50 0
+
+    set-measure-timings 50 0
 
   set-inter-measurement-ms inter-measurement-ms:
     driver_.set-inter-measurement inter-measurement-ms
     
   set-measure-timings timing-budget inter-measurement:
+    if inter-measurement != 0 and inter-measurement < timing-budget:
+      throw "Inter-measurement period can not be less than timing budget ($timing-budget)"
+
+    if inter-measurement != 0 and timing-budget > inter-measurement:
+      throw "Timing budget can not be greater than inter-measurement period ($inter-measurement)"
+
     driver_.set_inter_measurement inter_measurement
     driver_.set_timing_budget timing_budget
 
@@ -99,9 +113,7 @@ class VL53L4CD:
 
   wait-for-boot:
     with-timeout (Duration --ms=1000):
-      while true:
-        if driver_.get-system-status == 0x03:
-          return
+      while driver_.get-system-status != 0x03:
         sleep --ms=1
 
   clear-interrupt:
@@ -131,9 +143,7 @@ class VL53L4CD:
   start-vhv:
     driver_.start-vhv
     with-timeout (Duration --ms=1000):
-      while true:
-        if driver_.is-data-ready:
-          return
+      while not driver_.is-data-ready:
         sleep --ms=1
 
   start-temperature-update:
@@ -143,9 +153,7 @@ class VL53L4CD:
     driver_.start-ranging
 
     with-timeout (Duration --ms=1000):
-      while true:
-        if driver_.is-data-ready:
-          return
+      while not driver_.is-data-ready:
         sleep --ms=1
 
     driver_.clear-interrupt
@@ -159,16 +167,12 @@ class VL53L4CD:
       while not driver_.is-data-ready:
         sleep --ms=1
       
-      driver_.get-distance
+      result := get-result
       driver_.clear-interrupt
     driver_.stop-ranging
 
   get-height-trigger-threshold intensity=25 percentage=10.0 -> int:
-    set-mode MODE-DEFAULT
 
-    set-signal-threshold 5000
-    set-sigma-threshold 10
-    set-measure-timings 40 50
     heights := ringbuffer.RingBuffer intensity
     device-heat-loop
     
@@ -176,12 +180,15 @@ class VL53L4CD:
     distance := 0.0
     intensity.repeat:
       while not driver_.is-data-ready:
-        sleep --ms=1
+        sleep --ms=2
       
-      distance = (driver_.get-distance).to-float
+      result := get-result
+      distance = result.distance-mm.to-float
+      if distance == 0:
+        result.dump
+      print "Distance: $(%4d distance) mm [$result.get-status-string]" 
       heights.append distance
-      print "Height added: $distance"
-      driver_.clear-interrupt
+      clear-interrupt
 
     stop-ranging
     mean-distance := heights.average
@@ -211,8 +218,8 @@ class VL53L4CD:
       while not driver_.is-data-ready:
         sleep --ms=1
       
-      distance = (driver_.get-distance).to-float
-      distances.append distance
+      result := get-result
+      distances.append result.distance-mm.to-float
       driver_.clear-interrupt
     
     stop-ranging
@@ -221,12 +228,14 @@ class VL53L4CD:
     pre-offset := target-distance-mm - mean-distance
     tmp-offset := pre-offset * 4
     driver_.set-offset tmp-offset 0x00 0x00
+    print "Calibrating offset done"
     return tmp-offset
 
   set-offset offset:
     driver_.set-offset offset 0x00 0x00
 
   calibrate-xtalk target-distance-mm nb-samples:
+    print "Calibrating xtalk"
     if (nb-samples < 5 or nb-samples > 255) or (target-distance-mm < 10 or target-distance-mm > 5000):
       throw "Invalid offset calibration parameters"
 
@@ -244,6 +253,7 @@ class VL53L4CD:
         sleep --ms=1
         
       result = get-result
+      // result.print-status
       driver_.clear-interrupt
 
       if(result.range_status == 0 and it > 0):
@@ -251,7 +261,7 @@ class VL53L4CD:
           average-distance += result.distance-mm
           average-spad-nb += result.number-of-spad
           average-signal += result.signal-rate-kcps
-          counter-nb-samples += 1
+          counter-nb-samples++
         
     stop_ranging
     if(counter_nb_samples == 0):
@@ -271,7 +281,8 @@ class VL53L4CD:
       print "ERROR: Xtalk compensation value is higher then 127 failed"
     
     driver_.set-cross-talk xtalk-kcps.to-int
-    return xtalk_kcps
+    print "Calibrating xtalk done"
+    return xtalk_kcps.to-int
 
   set-xtalk xtalk:
     driver_.set-cross-talk xtalk
@@ -284,9 +295,10 @@ class VL53L4CD:
     result.ambient-rate-kcps = driver_.get-result-ambient-rate
     result.sigma-mm = driver_.get-result-sigma
     result.distance-mm = driver_.get-result-distance
-    print "distance: $result.distance-mm"
-    result.signal-per-spad-kcps = result.signal-rate-kcps / result.number-of-spad
-    result.ambient-per-spad-kcps = result.ambient-rate-kcps / result.number-of-spad
+    if result.number-of-spad != 0: result.signal-per-spad-kcps = result.signal-rate-kcps / result.number-of-spad
+    else: print "Warning: SPAD count is 0"
+    if result.number-of-spad != 0: result.ambient-per-spad-kcps = result.ambient-rate-kcps / result.number-of-spad
+    else: print "Warning: SPAD count is 0"
 
     return result
 
@@ -299,3 +311,36 @@ class Result:
   distance-mm := 0
   signal-per-spad-kcps := 0
   ambient-per-spad-kcps := 0
+
+  dump:
+    print "Result: SPAD=$number-of-spad,   Signal=$signal-rate-kcps,   Ambient=$ambient-rate-kcps,   Sigma=$sigma-mm,  Distance=$distance-mm,  Signal/SPAD=$signal-per-spad-kcps,  Ambient/SPAD=$ambient-per-spad-kcps | $get-status-string"
+
+  get-status-string -> string:
+    if range-status == 0:
+      return "✓ Valid measurement"
+    else if range-status == 1:
+      return "/ Warning! Sigma is above the defined threshold"
+    else if range-status == 2:
+      return "/ Warning! Signal is below the defined threshold"
+    else if range-status == 3:
+      return "✗ Error: Measured distance is below detection threshold"
+    else if range-status == 4:
+      return "✗ Error: Phase out of valid limit"
+    else if range-status == 5:
+      return "✗ Error: Hardware Fail"
+    else if range-status == 6:
+      return "/ Warning: Phase valid but no wrap around check performed"
+    else if range-status == 7:
+      return "✗ Error: Wrapped target, phase does not match"
+    else if range-status == 8:
+      return "✗ Error: Processing fail"
+    else if range-status == 9:
+      return "✗ Error: Crosstalk signal fail"
+    else if range-status == 10:
+      return "✗ Error: Interrupt error"
+    else if range-status == 11:
+      return "✗ Error: Merged target"
+    else if range-status == 12:
+      return "✗ Error: Signal is too low"
+    else:
+      return "✗ Unknown Error"

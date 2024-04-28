@@ -6,6 +6,8 @@ import reader
 import gpio
 
 import .api_service_provider show ApiServiceProvider
+import ..indicator.color show Color
+import ..indicator.indicator-service-client show IndicatorClient
 import ..komodo
 
 PREFERED-MTU ::= 512
@@ -48,6 +50,10 @@ main :
   try:
     provider.install
     name := "RepTrap"
+
+    led := IndicatorClient
+    led.open
+
     run-ble-service name
     logger.info "running Komodo BLE device '$name'"
     validate-firmware --reason="bluetooth service started"
@@ -63,6 +69,7 @@ main :
       :: usb-c-watcher-task,
     ]
 
+    led.set-color Color.blue
     running := true
     while running:
       command := command-channel.receive --blocking=true

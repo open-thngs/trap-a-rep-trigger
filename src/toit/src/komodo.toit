@@ -16,6 +16,9 @@ import .trigger as trigger
 import .ble.bluetooth as bluetooth
 import .app as app
 import .rgb-led show RGBLED
+import .indicator.indicator-service-provider show IndicatorServiceProvider
+import .sensor-manager show PIN-MASK
+import .utils show extract-pins
 
 USB-DETECT-PIN ::= 9
 
@@ -32,8 +35,18 @@ firmware-is-upgrade-pending / bool := false
 reg-led := ?
 
 main arguments:
-  logger.info "Starting RepTrap..."
+  status := esp32.ext1-wakeup-status PIN-MASK
+  pins := extract-pins status
+  logger.info "Starting RepTrap... reason [$status] Pins[$pins]"
+  
   device := Device.parse arguments
+
+  indicator := IndicatorServiceProvider
+  rgb-led := RGBLED
+  indicator.set-color-handler :: | color |
+    rgb-led.set-color color
+  indicator.install
+
   if esp32.wakeup-cause == esp32.WAKEUP-EXT1:
     spawn:: trigger.main
   else:

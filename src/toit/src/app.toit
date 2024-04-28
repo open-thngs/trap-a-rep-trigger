@@ -15,21 +15,24 @@ import .sensor-manager show SensorManager
 import .ble.bluetooth as ble-app
 import .utils show deep-sleep
 import .ble.bluetooth show State
+import .indicator.color show Color
+import .indicator.indicator-service-client show IndicatorClient
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
 command-channel := monitor.Channel 1
 sensor-manager/SensorManager := ?
 api/ApiClient:=?
 sensor-array := []
-led := ?
+led/IndicatorClient := ?
 is-ble-available := false
 
 main:
-  logger.debug "Starting VL53L4CD Sensor Array $esp32.reset-reason"
+  logger.debug "Starting VL53L4CD Sensor Array"
   
-  try:
-    led = RGBLED
-    led.yellow
+  try: catch --trace:
+    led = IndicatorClient
+    led.open
+    led.set-color Color.green
 
     is-ble-available = init-ble-api
 
@@ -41,24 +44,21 @@ main:
       handle-command
 
   finally:
-    led.close
     sensor-manager.close
 
   deep-sleep
 
 blink:
   3.repeat:
-    led.red
+    led.set-color Color.red
     sleep --ms=250
-    led.off
+    led.set-color Color.off
     sleep --ms=250
 
 handle-command:
   command := command-channel.receive --blocking=true
   if command == Command.TRIGGER:
-    led.green
     (CameraTrigger).run
-    led.off
   else if command == Command.CALIBRATE:
     calibrate
   else if command == Command.XTALK:
@@ -95,9 +95,8 @@ init-ble-api -> bool:
     return true
 
 calibrate:
-  led.yellow
+  led.set-color Color.yellow
   set-status State.CALIBRATING
-  sensor-manager.disable-all
   sensor-manager.calibrate-and-start
   set-status State.READY
   blink

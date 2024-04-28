@@ -1,31 +1,33 @@
-import .rgb-led show RGBLED
 import gpio
 import i2c
-import .vl53l4cd
 import system.storage
+
 import .sensor-manager show SensorManager
+import .indicator.color show Color
+import .indicator.indicator-service-client show IndicatorClient
+import .vl53l4cd
 
 CALIBRATION-TARGET-DISTANCE ::= 100
-CALIBRATION-SMPLES ::= 30
+CALIBRATION-SMPLES ::= 50
 
-led := ?
+led/IndicatorClient := ?
 sensor-manager := ?
 
 main:
-  led = RGBLED
-  led.green
+  led = IndicatorClient
+  led.set-color Color.green
 
   sensor-manager = SensorManager
   calibrate-xtalk sensor-manager led
 
-calibrate-xtalk sensor-manager led:
+calibrate-xtalk sensor-manager led/IndicatorClient:
   debugging := false
   last_temperature := 0
 
   bucket := storage.Bucket.open --flash "sensor-cfg"
 
   print "Calibration started..."
-  led.yellow
+  led.set-color Color.yellow
   print "Initialising sensors"
   sensor-manager.disable-all
   sensor-manager.sensor-array.do: |sensor|

@@ -9,11 +9,8 @@ import .vl53l4cd
 import .sensor-manager show SensorManager
 import .sensor-manager show PIN-MASK
 import .utils show deep-sleep
-
-VL53_INT_1      ::= 21
-VL53_INT_2      ::= 18
-VL53_INT_3      ::= 6
-VL53_INT_4      ::= 7
+import .indicator.indicator-service-client show IndicatorClient
+import .indicator.color show Color
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="trigger"
 
@@ -22,13 +19,15 @@ main:
   //TODO do not run if the main app is running
 
   exception := catch --trace: 
-    // rgb-led.green
+    led := IndicatorClient
+    led.open
+    led.set-color Color.pink
     cam-trigger := CameraTrigger
     cam-trigger.run
     sensor-manager := SensorManager
     sensor-manager.init-all
     sensor-manager.clear-interrupts
-    // rgb-led.off
+    led.set-color Color.off
   if exception:
     logger.debug "Error: Ignored trigger"
   

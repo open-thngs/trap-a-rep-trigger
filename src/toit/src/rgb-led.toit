@@ -1,6 +1,8 @@
 import gpio show Pin
 import gpio.pwm show Pwm PwmChannel
 
+import .indicator.color show Color
+
 class RGBLED:
   
   red-pin/Pin := ?
@@ -24,6 +26,12 @@ class RGBLED:
     red_channel = generator.start red-pin
     green_channel = generator.start green-pin
     blue_channel = generator.start blue-pin
+
+  set-color color/Color:
+    red_ = color.color[0] / 255.0
+    green_ = color.color[1] / 255.0
+    blue_ = color.color[2] / 255.0
+    apply-color
 
   set-color red/int green/int blue/int:
     assert: 0 <= red <= 255
