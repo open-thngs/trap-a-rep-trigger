@@ -118,4 +118,5 @@ class SensorManager:
 
   clear-interrupts:
     sensor-array.values.do: |sensor|
+      print "Clearing interrupt for $sensor.name"
       sensor.clear-interrupt

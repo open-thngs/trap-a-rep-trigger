@@ -8,7 +8,7 @@ deep-sleep:
 
 extract-pins value-> List:
   pins := []
-  21.repeat:
+  22.repeat:
     if value & (1 << it) != 0:
       pins.add it
   return pins
