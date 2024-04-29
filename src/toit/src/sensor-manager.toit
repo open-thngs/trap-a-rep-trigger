@@ -44,6 +44,8 @@ class SensorManager:
       --scl=scl
       --frequency=400_000
     
+    print "I2C Bus Devices: $bus.scan"
+
     debugging := false
     vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53_ADDR_1 --debug=debugging
     vl53-2 := VL53L4CD bus "VL53_2" VL53_XSHUNT_2 VL53_ADDR_2 --debug=debugging
