@@ -19,8 +19,7 @@ class VL53L4CD:
 
   constructor .bus_ .name/string xshut_pin/int .i2caddr=41 --debug=false:
     driver_ = VL53L4CD-DRIVER bus_ i2caddr debug
-    xshut-pin_ = gpio.Pin.out xshut_pin
-    xshut-pin_.set 0
+    xshut-pin_ = gpio.Pin xshut_pin
 
   init:
     driver_.init
@@ -29,12 +28,14 @@ class VL53L4CD:
     driver_.device_.close
 
   enable:
+    xshut-pin_.configure --output=true
     xshut-pin_.set 1
     sleep --ms=10
 
   disable:
     if driver_.device_:
       driver_.device_.close
+    xshut-pin_.configure --output=true
     xshut-pin_.set 0
     sleep --ms=10
 
@@ -172,9 +173,7 @@ class VL53L4CD:
     driver_.stop-ranging
 
   get-height-trigger-threshold intensity=25 percentage=10.0 -> int:
-    set-signal-threshold 5000
-    set-sigma-threshold 10
-    set-measure-timings 40 70
+    set-mode MODE-DEFAULT
     heights := ringbuffer.RingBuffer intensity
     device-heat-loop
     
