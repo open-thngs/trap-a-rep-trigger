@@ -85,6 +85,7 @@ class SensorManager:
     disable-all
     sensor-array.values.do: | sensor |
       sensor.enable
+      sensor.wait-for-boot
       sensor.apply-i2c-address
     
     failed-sensors := []
@@ -93,7 +94,7 @@ class SensorManager:
       exception := catch --trace:
         sensor.start-temperature-update
         // apply_sensor_cfg sensor bucket
-        threashold-mm := sensor.get-height-trigger-threshold 30 10
+        threashold-mm := sensor.get-height-trigger-threshold 25 10
         sensor.set-mode MODE-LOW-POWER
         sensor.set-signal-threshold 5000
         print "Signal Threashold: $sensor.get-signal-threshold"
