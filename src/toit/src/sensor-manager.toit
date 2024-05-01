@@ -58,8 +58,8 @@ class SensorManager:
 
     // vl53-1.xshut-pin_.configure --output=true
     // vl53-1.xshut-pin_.set 0
-    // vl53-2.xshut-pin_.configure --output=true
-    // vl53-2.xshut-pin_.set 0
+    vl53-2.xshut-pin_.configure --output=true
+    vl53-2.xshut-pin_.set 0
     // vl53-3.xshut-pin_.configure --output=true
     // vl53-3.xshut-pin_.set 0
     // vl53-4.xshut-pin_.configure --output=true
