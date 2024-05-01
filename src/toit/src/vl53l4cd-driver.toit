@@ -56,15 +56,15 @@ class VL53L4CD-DRIVER:
     // print "VL53L4CD[$(i2c-address)]" 
 
   write-config config:
+    // print "write config: "
+    // config.do: if it: print "0x$(%02x it) " else: print "null"
     write_ SENSOR-CONFIG config
-    // reg := 0x2d
-    // config.do: | value |
-    //   write_ #[reg] #[value]
-    //   reg += 1
+    // read-config
 
   read-config:
     config := read_ SENSOR-CONFIG --length=91
-    config.do: print "0x$(%02x it)"
+    print "read config: "
+    config.do: if it: print "0x$(%02x it) " else: print "null"
 
   set-macrop-loop-bound value:
     write_ VHV-CONFIG-TIMEOUT-MACROP-LOOP-BOUND #[value]
@@ -270,3 +270,19 @@ class VL53L4CD-DRIVER:
     // logger.info ">>WRITE [$register] [$data]"
     device_.write-address register data
     // sleep --ms=1
+
+  set-macro-timing-lp macro_timing/int:
+    if macro_timing < 1 or macro_timing > 255:
+      throw "Macro timing low power must be between 1 and 255"
+
+    write_ RANGE_CONFIG_A #[macro_timing]
+    write_ RANGE_CONFIG_B #[macro_timing + 1]
+
+  set-inter-measurement-ms-lp inter_measurement_ms/int:
+    if inter_measurement_ms < 10 or inter_measurement_ms > 60000:
+      throw "Inter-measurement period must be between 10ms and 60000ms"
+  
+    clock_pll := get-clock-pll
+    inter_measurement_factor := INTER-MEASUREMENT-FACTOR * inter_measurement_ms * clock_pll
+  
+    write_ INTERMEASUREMENT_MS (pack-32 inter_measurement_factor.to-int)

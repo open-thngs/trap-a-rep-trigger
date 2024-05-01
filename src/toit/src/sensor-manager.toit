@@ -9,7 +9,7 @@ MEASURE-FREQUENCY ::= 70
 
 VL53_ADDR_1   ::= 42
 VL53_XSHUNT_1 ::= 47
-// VL53_XSHUNT_1 ::= 20
+// VL53_XSHUNT_1 ::= 20 //breadboard xshunt
 VL53_INT_1    ::= 21
 
 VL53_ADDR_2   ::= 43
@@ -24,7 +24,7 @@ VL53_ADDR_4   ::= 45
 VL53_XSHUNT_4 ::= 8
 VL53_INT_4    ::= 7
 
-PIN-MASK ::= ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << VL53-INT-4))
+PIN-MASK ::= ((1 << VL53-INT-1)  | (1 << VL53-INT-3) | (1 << VL53-INT-4)) //| (1 << VL53-INT-2)
 
 class SensorManager:
 
@@ -44,7 +44,7 @@ class SensorManager:
       --scl=scl
       --frequency=400_000
     
-    print "I2C Bus Devices: $bus.scan"
+    // print "I2C Bus Devices: $bus.scan"
 
     debugging := false
     vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53_ADDR_1 --debug=debugging
@@ -52,9 +52,18 @@ class SensorManager:
     vl53-3 := VL53L4CD bus "VL53_3" VL53_XSHUNT_3 VL53_ADDR_3 --debug=debugging
     vl53-4 := VL53L4CD bus "VL53_4" VL53_XSHUNT_4 VL53_ADDR_4 --debug=debugging
     sensor-array[vl53-1.name] = vl53_1
-    sensor-array[vl53-2.name] = vl53_2
+    // sensor-array[vl53-2.name] = vl53_2
     sensor-array[vl53-3.name] = vl53_3
     sensor-array[vl53-4.name] = vl53_4
+
+    // vl53-1.xshut-pin_.configure --output=true
+    // vl53-1.xshut-pin_.set 0
+    // vl53-2.xshut-pin_.configure --output=true
+    // vl53-2.xshut-pin_.set 0
+    // vl53-3.xshut-pin_.configure --output=true
+    // vl53-3.xshut-pin_.set 0
+    // vl53-4.xshut-pin_.configure --output=true
+    // vl53-4.xshut-pin_.set 0
   
   get-sensor name/string:
     return sensor-array[name]
@@ -83,27 +92,28 @@ class SensorManager:
 
   calibrate-and-start:
     disable-all
-    sensor-array.values.do: | sensor |
-      sensor.enable
-      sensor.wait-for-boot
-      sensor.apply-i2c-address
-    
-    failed-sensors := []
-    sensor-array.values.do: |sensor|
+
+    sensor-array.values.do: |sensor/VL53L4CD|
       print "---------- $sensor.name ------------"
-      exception := catch --trace:
-        sensor.start-temperature-update
-        // apply_sensor_cfg sensor bucket
-        threashold-mm := sensor.get-height-trigger-threshold 25 10
-        sensor.set-mode MODE-LOW-POWER
-        sensor.set-signal-threshold 5000
-        print "Signal Threashold: $sensor.get-signal-threshold"
-        sensor.set-sigma-threshold 10
-        print "Sigma mm: $sensor.get_sigma_threshold"
-        sensor.set-measure-timings TIME-TO-MEASURE MEASURE-FREQUENCY// + (random 6) //add a random to the frequency to avoid synchronisation of the sensors
-        sensor.set-interrupt threashold-mm true
-        sensor.clear-interrupt
-        sensor.start-ranging
+      sensor.enable
+      sensor.apply-i2c-address
+      sensor.set-mode MODE-DEFAULT
+      sensor.start-temperature-update
+      // apply_sensor_cfg sensor bucket
+      threashold-mm := sensor.get-height-trigger-threshold 25 10
+      sensor.set-mode MODE-LOW-POWER
+      sensor.set-signal-threshold 5000
+      sensor.set-sigma-threshold 10
+      // sensor.set-inter-measurement-ms-lp 100
+      // sensor.set-macro-timing-lp 1
+      sensor.set-measure-timings (TIME-TO-MEASURE + (random 6)) (MEASURE-FREQUENCY + (random 6)) //add a random to the frequency to avoid synchronisation of the sensors
+      
+      sensor.set-interrupt threashold-mm true
+      sensor.clear-interrupt
+      sensor.start-ranging
+      
+    sleep --ms=1000
+    clear-interrupts
 
   apply-sensor-cfg sensor bucket:
     e1 := catch:
@@ -121,5 +131,7 @@ class SensorManager:
 
   clear-interrupts:
     sensor-array.values.do: |sensor|
+      result/Result := sensor.get-result
+      print "[$sensor.name]: Distance: $(%4d result.distance-mm) mm [$result.get-status-string]" 
       print "Clearing interrupt for $sensor.name"
       sensor.clear-interrupt
