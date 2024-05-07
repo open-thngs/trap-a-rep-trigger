@@ -267,9 +267,9 @@ class VL53L4CD-DRIVER:
     return value
 
   write_ register/ByteArray data/ByteArray:
-    // logger.info ">>WRITE [$register] [$data]"
+    // logger.info ">>WRITE addr: [$i2c-address_] reg: [$register] data: [$data]"
     device_.write-address register data
-    // sleep --ms=1
+    // sleep --ms=10
 
   set-macro-timing-lp macro_timing/int:
     if macro_timing < 1 or macro_timing > 255:
