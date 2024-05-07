@@ -29,7 +29,7 @@ is-ble-available := false
 main:
   logger.debug "Starting VL53L4CD Sensor Array"
   
-  try: catch --trace:
+  try: catch --trace --unwind=true:
     led = IndicatorClient
     led.open
     led.set-color Color.green
