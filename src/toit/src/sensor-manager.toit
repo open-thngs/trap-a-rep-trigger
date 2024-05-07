@@ -42,24 +42,24 @@ class SensorManager:
     bus = i2c.Bus
       --sda=sda
       --scl=scl
-      --frequency=400_000
+      --frequency=300_000
     
-    // print "I2C Bus Devices: $bus.scan"
-
     debugging := false
     vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53_ADDR_1 --debug=debugging
     vl53-2 := VL53L4CD bus "VL53_2" VL53_XSHUNT_2 VL53_ADDR_2 --debug=debugging
     vl53-3 := VL53L4CD bus "VL53_3" VL53_XSHUNT_3 VL53_ADDR_3 --debug=debugging
     vl53-4 := VL53L4CD bus "VL53_4" VL53_XSHUNT_4 VL53_ADDR_4 --debug=debugging
     sensor-array[vl53-1.name] = vl53_1
-    // sensor-array[vl53-2.name] = vl53_2
+    sensor-array[vl53-2.name] = vl53_2
     sensor-array[vl53-3.name] = vl53_3
     sensor-array[vl53-4.name] = vl53_4
+    
+    // print "I2C Bus Devices: $bus.scan"
 
     // vl53-1.xshut-pin_.configure --output=true
     // vl53-1.xshut-pin_.set 0
-    vl53-2.xshut-pin_.configure --output=true
-    vl53-2.xshut-pin_.set 0
+    // vl53-2.xshut-pin_.configure --output=true
+    // vl53-2.xshut-pin_.set 0
     // vl53-3.xshut-pin_.configure --output=true
     // vl53-3.xshut-pin_.set 0
     // vl53-4.xshut-pin_.configure --output=true
@@ -92,14 +92,13 @@ class SensorManager:
 
   calibrate-and-start:
     disable-all
-
     sensor-array.values.do: |sensor/VL53L4CD|
       print "---------- $sensor.name ------------"
       sensor.enable
       sensor.apply-i2c-address
       sensor.set-mode MODE-DEFAULT
       sensor.start-temperature-update
-      // apply_sensor_cfg sensor bucket
+      apply_sensor_cfg sensor bucket
       threashold-mm := sensor.get-height-trigger-threshold 25 10
       sensor.set-mode MODE-LOW-POWER
       sensor.set-signal-threshold 5000
@@ -111,9 +110,7 @@ class SensorManager:
       sensor.set-interrupt threashold-mm true
       sensor.clear-interrupt
       sensor.start-ranging
-      
-    sleep --ms=1000
-    clear-interrupts
+      // sleep --ms=(random 900 1000)
 
   apply-sensor-cfg sensor bucket:
     e1 := catch:
