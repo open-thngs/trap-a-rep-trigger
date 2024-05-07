@@ -184,6 +184,12 @@ class VL53L4CD:
         sleep --ms=2
       
       result := get-result
+      // while result.distance-mm == 0:
+      //   clear-interrupt
+      //   while not driver_.is-data-ready:
+      //     sleep --ms=2
+      //   result = get-result
+
       distance = result.distance-mm.to-float
       if distance == 0:
         result.dump
