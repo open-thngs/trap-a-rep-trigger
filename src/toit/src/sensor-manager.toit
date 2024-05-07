@@ -5,26 +5,26 @@ import system.storage
 import .vl53l4cd
 
 TIME-TO-MEASURE   ::= 40
-MEASURE-FREQUENCY ::= 70
+MEASURE-FREQUENCY ::= 80
 
-VL53_ADDR_1   ::= 42
+VL53_ADDR_1   ::= 20
 VL53_XSHUNT_1 ::= 47
 // VL53_XSHUNT_1 ::= 20 //breadboard xshunt
 VL53_INT_1    ::= 21
 
-VL53_ADDR_2   ::= 43
+VL53_ADDR_2   ::= 30
 VL53_XSHUNT_2 ::= 17
 VL53_INT_2    ::= 18
 
-VL53_ADDR_3   ::= 44
+VL53_ADDR_3   ::= 40
 VL53_XSHUNT_3 ::= 5
 VL53_INT_3    ::= 6
 
-VL53_ADDR_4   ::= 45
+VL53_ADDR_4   ::= 50
 VL53_XSHUNT_4 ::= 8
 VL53_INT_4    ::= 7
 
-PIN-MASK ::= ((1 << VL53-INT-1)  | (1 << VL53-INT-3) | (1 << VL53-INT-4)) //| (1 << VL53-INT-2)
+PIN-MASK ::= ((1 << VL53-INT-1) | (1 << VL53-INT-2) | (1 << VL53-INT-3) | (1 << VL53-INT-4)) //
 
 class SensorManager:
 
