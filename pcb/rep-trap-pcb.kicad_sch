@@ -1,274 +1,649 @@
-(kicad_sch (version 20230121) (generator eeschema)
-
-  (uuid b363dc8f-4a45-4779-a397-ccb82393dab8)
-
-  (paper "A4")
-
-  (title_block
-    (title "Passthrough Trigger Sensor")
-    (date "2023-07-02")
-    (rev "rev01")
-    (company "open-things")
-  )
-
-  (lib_symbols
-  )
-
-
-  (polyline (pts (xy 93.98 41.91) (xy 115.57 41.91))
-    (stroke (width 0) (type default))
-    (uuid 1b062dd6-6910-4e5d-8402-07e524abb261)
-  )
-  (polyline (pts (xy 139.7 21.59) (xy 223.52 21.59))
-    (stroke (width 0) (type default))
-    (uuid 2585c62e-059d-438b-9a89-9a2b825f805c)
-  )
-  (polyline (pts (xy 173.99 41.91) (xy 173.99 50.8))
-    (stroke (width 0) (type default))
-    (uuid 2ca44695-71d0-40ce-847d-008c2c098651)
-  )
-  (polyline (pts (xy 185.42 101.6) (xy 191.77 101.6))
-    (stroke (width 0) (type default))
-    (uuid 32ee3645-d4df-4d5b-a5e2-be1a0b7b6262)
-  )
-  (polyline (pts (xy 190.5 57.15) (xy 199.39 57.15))
-    (stroke (width 0) (type default))
-    (uuid 3a4b1990-def2-4495-856b-bf9e5ecd749c)
-  )
-  (polyline (pts (xy 130.81 26.67) (xy 139.7 26.67))
-    (stroke (width 0) (type default))
-    (uuid 42f80e76-e394-485a-85d4-07cbc46d9a60)
-  )
-  (polyline (pts (xy 129.54 93.98) (xy 140.97 93.98))
-    (stroke (width 0) (type default))
-    (uuid 49ea74a1-4e12-4ba3-ab48-ee0c986471ed)
-  )
-  (polyline (pts (xy 114.3 69.85) (xy 114.3 83.82))
-    (stroke (width 0) (type default))
-    (uuid 5b647483-00ca-4774-aabe-5916e4b89793)
-  )
-  (polyline (pts (xy 190.5 63.5) (xy 201.93 63.5))
-    (stroke (width 0) (type default))
-    (uuid 6772f483-d977-427c-9da1-fc7288033be1)
-  )
-  (polyline (pts (xy 129.54 101.6) (xy 152.4 101.6))
-    (stroke (width 0) (type default))
-    (uuid 835c7c8c-21a5-44be-812f-94f85063aa65)
-  )
-  (polyline (pts (xy 129.54 116.84) (xy 152.4 116.84))
-    (stroke (width 0) (type default))
-    (uuid 8e4cfb73-862b-4b85-9dd2-64b238db566e)
-  )
-  (polyline (pts (xy 201.93 72.39) (xy 201.93 63.5))
-    (stroke (width 0) (type default))
-    (uuid 8fabf25f-197c-43cc-8e88-1a012249dd1c)
-  )
-  (polyline (pts (xy 199.39 50.8) (xy 199.39 57.15))
-    (stroke (width 0) (type default))
-    (uuid 98ec947a-d064-4c36-8109-7082b8f275d7)
-  )
-  (polyline (pts (xy 128.27 59.69) (xy 157.48 59.69))
-    (stroke (width 0) (type default))
-    (uuid a596afe6-246e-4b17-9aa2-3b42574b8234)
-  )
-  (polyline (pts (xy 93.98 83.82) (xy 93.98 41.91))
-    (stroke (width 0) (type default))
-    (uuid adc8c98c-7b1a-401d-aa81-e88b84ccfcb4)
-  )
-  (polyline (pts (xy 224.79 109.22) (xy 233.68 109.22))
-    (stroke (width 0) (type default))
-    (uuid b1ee1725-f296-4f1a-b2e5-a01fd27dae6d)
-  )
-  (polyline (pts (xy 199.39 109.22) (xy 191.77 109.22))
-    (stroke (width 0) (type default))
-    (uuid c32ed26d-06d5-4206-b996-4ee325245bd2)
-  )
-  (polyline (pts (xy 185.42 116.84) (xy 191.77 116.84))
-    (stroke (width 0) (type default))
-    (uuid d114bf74-5d63-45df-b29b-cdbeb7d485f0)
-  )
-  (polyline (pts (xy 191.77 109.22) (xy 191.77 116.84))
-    (stroke (width 0) (type default))
-    (uuid d1490038-cb31-4d27-a53e-5f372f5f6f47)
-  )
-  (polyline (pts (xy 139.7 26.67) (xy 139.7 21.59))
-    (stroke (width 0) (type default))
-    (uuid d240728a-b833-48e4-886f-622efe2dbeed)
-  )
-  (polyline (pts (xy 71.12 93.98) (xy 85.09 93.98))
-    (stroke (width 0) (type default))
-    (uuid d9a25751-60f7-4b1c-a251-15d5203ef89a)
-  )
-  (polyline (pts (xy 209.55 50.8) (xy 199.39 50.8))
-    (stroke (width 0) (type default))
-    (uuid d9cc81f7-79ba-499d-aaca-73636d70f363)
-  )
-  (polyline (pts (xy 115.57 34.29) (xy 115.57 41.91))
-    (stroke (width 0) (type default))
-    (uuid e86266f6-c0c9-4fb4-8e71-03e90d6ead4e)
-  )
-  (polyline (pts (xy 152.4 86.36) (xy 140.97 86.36))
-    (stroke (width 0) (type default))
-    (uuid eb0ef763-8ad5-4347-aaff-011b1acba4a8)
-  )
-  (polyline (pts (xy 191.77 109.22) (xy 191.77 101.6))
-    (stroke (width 0) (type default))
-    (uuid f8c70039-4f05-44c2-8e1b-50dd5251bd22)
-  )
-  (polyline (pts (xy 223.52 21.59) (xy 223.52 44.45))
-    (stroke (width 0) (type default))
-    (uuid f8e3859b-1e9c-46aa-b251-5ebce683cda2)
-  )
-  (polyline (pts (xy 140.97 86.36) (xy 140.97 93.98))
-    (stroke (width 0) (type default))
-    (uuid fb1d4005-b2ab-47eb-9946-cfd32fd2bc32)
-  )
-  (polyline (pts (xy 209.55 72.39) (xy 201.93 72.39))
-    (stroke (width 0) (type default))
-    (uuid fb27f9c7-41a3-4fc7-aa9e-9625d2d646a2)
-  )
-
-  (rectangle (start 233.68 101.6) (end 264.16 116.84)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 369d33ec-9b1d-442f-9eab-dd2a2809750d)
-  )
-  (rectangle (start 39.37 83.82) (end 71.12 102.87)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 3d751261-4649-4b7d-b87e-a6661dcddc2a)
-  )
-  (rectangle (start 99.06 21.59) (end 130.81 34.29)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 5157ff8f-cf26-4f6b-9894-bc51ebb952df)
-  )
-  (rectangle (start 152.4 95.25) (end 185.42 107.95)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 5c6df8a2-1368-4f5d-95f8-75cbcab857a9)
-  )
-  (rectangle (start 152.4 110.49) (end 185.42 123.19)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 6f8d1407-d93f-47a7-b966-9bf3accec657)
-  )
-  (rectangle (start 152.4 80.01) (end 185.42 92.71)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 7f844227-fd66-4194-a629-2cd3b3623a22)
-  )
-  (rectangle (start 100.33 50.8) (end 128.27 69.85)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 82647cb0-6465-495f-a90c-384613b5a246)
-  )
-  (rectangle (start 149.86 27.94) (end 195.58 41.91)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 8aca9156-8930-442a-bff3-628449f8febd)
-  )
-  (rectangle (start 209.55 66.04) (end 241.3 78.74)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid 98d169ff-2b03-4d63-9cca-6d27c95d255e)
-  )
-  (rectangle (start 209.55 44.45) (end 241.3 57.15)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid b0a6e2a4-86ca-4882-9b58-c3651db5f77c)
-  )
-  (rectangle (start 199.39 101.6) (end 224.79 116.84)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid d9d0ef20-d997-415d-b90a-6364a2dd272c)
-  )
-  (rectangle (start 157.48 50.8) (end 190.5 69.85)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid de731f31-c00a-4705-af88-415b2c749066)
-  )
-  (rectangle (start 85.09 83.82) (end 129.54 128.27)
-    (stroke (width 0) (type default))
-    (fill (type none))
-    (uuid f6ff4fe2-8957-4d14-8c51-001fa68f0c70)
-  )
-
-  (text "ToF Sensor Array" (at 41.91 95.25 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 014c8221-b228-4071-b302-425206904047)
-  )
-  (text "FOCUS\nTRIGGER" (at 158.75 119.38 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 21f354b4-61ef-425b-8568-33cae33cf96a)
-  )
-  (text "TOGGLE ON/OFF SWITCH" (at 154.94 36.83 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 325c3c11-7742-485b-9844-83b280df33cd)
-  )
-  (text "SHUTTER \nTRIGGER" (at 158.75 104.14 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 3264b059-fa52-4c01-9566-5468d8caa5f7)
-  )
-  (text "DEBUG-LED" (at 158.75 87.63 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 33f02393-813d-4a8f-9a16-2e8a623d519d)
-  )
-  (text "BATTERY" (at 215.9 52.07 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 395f114e-a6ad-41a9-a5e3-cd407a57433b)
-  )
-  (text "USB-C\n" (at 109.22 62.23 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 3f7faf73-a109-4b19-979f-bdd2c2c2389a)
-  )
-  (text "MCU" (at 104.14 107.95 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 5cca9c5b-fb84-4cd3-af90-1eb2168a3b6d)
-  )
-  (text "PSU" (at 171.45 62.23 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 6a9fd21d-a43d-44e9-90e2-a1d07bf53af2)
-  )
-  (text "POWER-LED" (at 215.9 73.66 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 6ab2c778-8d1a-4917-a7a4-bcbda4452fe7)
-  )
-  (text "Optocoupler" (at 203.2 110.49 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid 8c83ef55-edc4-4112-8346-76db3c74af4b)
-  )
-  (text "POWER-LOW" (at 105.41 29.21 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid a2e72dd5-0dd9-4bf9-91f7-5d7979de43a1)
-  )
-  (text "2.5 Audio Jack" (at 237.49 110.49 0)
-    (effects (font (size 2 2)) (justify left bottom))
-    (uuid cd675b56-5054-4f8a-bd50-a2393d513a39)
-  )
-  (text "Go to Schematics -->" (at 36.83 180.34 0)
-    (effects (font (size 3 3) (thickness 0.6) bold) (justify left bottom))
-    (uuid e4bcf7c4-30d8-4473-adff-8f791b66b615)
-  )
-
-  (sheet (at 93.98 167.64) (size 72.39 22.86) (fields_autoplaced)
-    (stroke (width 0.1524) (type solid))
-    (fill (color 0 0 0 0.0000))
-    (uuid eebb1d37-a01d-4adf-be70-a8e8f9293475)
-    (property "Sheetname" "main" (at 93.98 166.9284 0)
-      (effects (font (size 1.27 1.27)) (justify left bottom))
-    )
-    (property "Sheetfile" "main.kicad_sch" (at 93.98 191.0846 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (instances
-      (project "rep-trap-pcb"
-        (path "/b363dc8f-4a45-4779-a397-ccb82393dab8" (page "5"))
-      )
-    )
-  )
-
-  (sheet_instances
-    (path "/" (page "1"))
-  )
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "b363dc8f-4a45-4779-a397-ccb82393dab8")
+	(paper "A4")
+	(title_block
+		(title "Passthrough Trigger Sensor")
+		(date "2023-07-02")
+		(rev "rev01")
+		(company "open-things")
+	)
+	(lib_symbols)
+	(polyline
+		(pts
+			(xy 93.98 41.91) (xy 115.57 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b062dd6-6910-4e5d-8402-07e524abb261")
+	)
+	(polyline
+		(pts
+			(xy 139.7 21.59) (xy 223.52 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2585c62e-059d-438b-9a89-9a2b825f805c")
+	)
+	(polyline
+		(pts
+			(xy 173.99 41.91) (xy 173.99 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ca44695-71d0-40ce-847d-008c2c098651")
+	)
+	(polyline
+		(pts
+			(xy 185.42 101.6) (xy 191.77 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32ee3645-d4df-4d5b-a5e2-be1a0b7b6262")
+	)
+	(polyline
+		(pts
+			(xy 190.5 57.15) (xy 199.39 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3a4b1990-def2-4495-856b-bf9e5ecd749c")
+	)
+	(polyline
+		(pts
+			(xy 130.81 26.67) (xy 139.7 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42f80e76-e394-485a-85d4-07cbc46d9a60")
+	)
+	(polyline
+		(pts
+			(xy 129.54 93.98) (xy 140.97 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49ea74a1-4e12-4ba3-ab48-ee0c986471ed")
+	)
+	(polyline
+		(pts
+			(xy 114.3 69.85) (xy 114.3 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b647483-00ca-4774-aabe-5916e4b89793")
+	)
+	(polyline
+		(pts
+			(xy 190.5 63.5) (xy 201.93 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6772f483-d977-427c-9da1-fc7288033be1")
+	)
+	(polyline
+		(pts
+			(xy 129.54 101.6) (xy 152.4 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "835c7c8c-21a5-44be-812f-94f85063aa65")
+	)
+	(polyline
+		(pts
+			(xy 129.54 116.84) (xy 152.4 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e4cfb73-862b-4b85-9dd2-64b238db566e")
+	)
+	(polyline
+		(pts
+			(xy 201.93 72.39) (xy 201.93 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8fabf25f-197c-43cc-8e88-1a012249dd1c")
+	)
+	(polyline
+		(pts
+			(xy 199.39 50.8) (xy 199.39 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98ec947a-d064-4c36-8109-7082b8f275d7")
+	)
+	(polyline
+		(pts
+			(xy 128.27 59.69) (xy 157.48 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a596afe6-246e-4b17-9aa2-3b42574b8234")
+	)
+	(polyline
+		(pts
+			(xy 93.98 83.82) (xy 93.98 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "adc8c98c-7b1a-401d-aa81-e88b84ccfcb4")
+	)
+	(polyline
+		(pts
+			(xy 224.79 109.22) (xy 233.68 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b1ee1725-f296-4f1a-b2e5-a01fd27dae6d")
+	)
+	(polyline
+		(pts
+			(xy 199.39 109.22) (xy 191.77 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c32ed26d-06d5-4206-b996-4ee325245bd2")
+	)
+	(polyline
+		(pts
+			(xy 185.42 116.84) (xy 191.77 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d114bf74-5d63-45df-b29b-cdbeb7d485f0")
+	)
+	(polyline
+		(pts
+			(xy 191.77 109.22) (xy 191.77 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1490038-cb31-4d27-a53e-5f372f5f6f47")
+	)
+	(polyline
+		(pts
+			(xy 139.7 26.67) (xy 139.7 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d240728a-b833-48e4-886f-622efe2dbeed")
+	)
+	(polyline
+		(pts
+			(xy 71.12 93.98) (xy 85.09 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9a25751-60f7-4b1c-a251-15d5203ef89a")
+	)
+	(polyline
+		(pts
+			(xy 209.55 50.8) (xy 199.39 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9cc81f7-79ba-499d-aaca-73636d70f363")
+	)
+	(polyline
+		(pts
+			(xy 115.57 34.29) (xy 115.57 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e86266f6-c0c9-4fb4-8e71-03e90d6ead4e")
+	)
+	(polyline
+		(pts
+			(xy 152.4 86.36) (xy 140.97 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb0ef763-8ad5-4347-aaff-011b1acba4a8")
+	)
+	(polyline
+		(pts
+			(xy 191.77 109.22) (xy 191.77 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8c70039-4f05-44c2-8e1b-50dd5251bd22")
+	)
+	(polyline
+		(pts
+			(xy 223.52 21.59) (xy 223.52 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e3859b-1e9c-46aa-b251-5ebce683cda2")
+	)
+	(polyline
+		(pts
+			(xy 140.97 86.36) (xy 140.97 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb1d4005-b2ab-47eb-9946-cfd32fd2bc32")
+	)
+	(polyline
+		(pts
+			(xy 209.55 72.39) (xy 201.93 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb27f9c7-41a3-4fc7-aa9e-9625d2d646a2")
+	)
+	(rectangle
+		(start 233.68 101.6)
+		(end 264.16 116.84)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 369d33ec-9b1d-442f-9eab-dd2a2809750d)
+	)
+	(rectangle
+		(start 39.37 83.82)
+		(end 71.12 102.87)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 3d751261-4649-4b7d-b87e-a6661dcddc2a)
+	)
+	(rectangle
+		(start 99.06 21.59)
+		(end 130.81 34.29)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 5157ff8f-cf26-4f6b-9894-bc51ebb952df)
+	)
+	(rectangle
+		(start 152.4 95.25)
+		(end 185.42 107.95)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 5c6df8a2-1368-4f5d-95f8-75cbcab857a9)
+	)
+	(rectangle
+		(start 152.4 110.49)
+		(end 185.42 123.19)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 6f8d1407-d93f-47a7-b966-9bf3accec657)
+	)
+	(rectangle
+		(start 152.4 80.01)
+		(end 185.42 92.71)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 7f844227-fd66-4194-a629-2cd3b3623a22)
+	)
+	(rectangle
+		(start 100.33 50.8)
+		(end 128.27 69.85)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 82647cb0-6465-495f-a90c-384613b5a246)
+	)
+	(rectangle
+		(start 149.86 27.94)
+		(end 195.58 41.91)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 8aca9156-8930-442a-bff3-628449f8febd)
+	)
+	(rectangle
+		(start 209.55 66.04)
+		(end 241.3 78.74)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 98d169ff-2b03-4d63-9cca-6d27c95d255e)
+	)
+	(rectangle
+		(start 209.55 44.45)
+		(end 241.3 57.15)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid b0a6e2a4-86ca-4882-9b58-c3651db5f77c)
+	)
+	(rectangle
+		(start 199.39 101.6)
+		(end 224.79 116.84)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid d9d0ef20-d997-415d-b90a-6364a2dd272c)
+	)
+	(rectangle
+		(start 157.48 50.8)
+		(end 190.5 69.85)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid de731f31-c00a-4705-af88-415b2c749066)
+	)
+	(rectangle
+		(start 85.09 83.82)
+		(end 129.54 128.27)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid f6ff4fe2-8957-4d14-8c51-001fa68f0c70)
+	)
+	(text "ToF Sensor Array"
+		(exclude_from_sim no)
+		(at 41.91 95.25 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "014c8221-b228-4071-b302-425206904047")
+	)
+	(text "FOCUS\nTRIGGER"
+		(exclude_from_sim no)
+		(at 158.75 119.38 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "21f354b4-61ef-425b-8568-33cae33cf96a")
+	)
+	(text "TOGGLE ON/OFF SWITCH"
+		(exclude_from_sim no)
+		(at 154.94 36.83 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "325c3c11-7742-485b-9844-83b280df33cd")
+	)
+	(text "SHUTTER \nTRIGGER"
+		(exclude_from_sim no)
+		(at 158.75 104.14 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "3264b059-fa52-4c01-9566-5468d8caa5f7")
+	)
+	(text "DEBUG-LED"
+		(exclude_from_sim no)
+		(at 158.75 87.63 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "33f02393-813d-4a8f-9a16-2e8a623d519d")
+	)
+	(text "BATTERY"
+		(exclude_from_sim no)
+		(at 215.9 52.07 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "395f114e-a6ad-41a9-a5e3-cd407a57433b")
+	)
+	(text "USB-C\n"
+		(exclude_from_sim no)
+		(at 109.22 62.23 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "3f7faf73-a109-4b19-979f-bdd2c2c2389a")
+	)
+	(text "MCU"
+		(exclude_from_sim no)
+		(at 104.14 107.95 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "5cca9c5b-fb84-4cd3-af90-1eb2168a3b6d")
+	)
+	(text "PSU"
+		(exclude_from_sim no)
+		(at 171.45 62.23 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "6a9fd21d-a43d-44e9-90e2-a1d07bf53af2")
+	)
+	(text "POWER-LED"
+		(exclude_from_sim no)
+		(at 215.9 73.66 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "6ab2c778-8d1a-4917-a7a4-bcbda4452fe7")
+	)
+	(text "Optocoupler"
+		(exclude_from_sim no)
+		(at 203.2 110.49 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "8c83ef55-edc4-4112-8346-76db3c74af4b")
+	)
+	(text "POWER-LOW"
+		(exclude_from_sim no)
+		(at 105.41 29.21 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "a2e72dd5-0dd9-4bf9-91f7-5d7979de43a1")
+	)
+	(text "2.5 Audio Jack"
+		(exclude_from_sim no)
+		(at 237.49 110.49 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left bottom)
+		)
+		(uuid "cd675b56-5054-4f8a-bd50-a2393d513a39")
+	)
+	(text "Go to Schematics -->"
+		(exclude_from_sim no)
+		(at 36.83 180.34 0)
+		(effects
+			(font
+				(size 3 3)
+				(thickness 0.6)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "e4bcf7c4-30d8-4473-adff-8f791b66b615")
+	)
+	(sheet
+		(at 93.98 167.64)
+		(size 72.39 22.86)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "eebb1d37-a01d-4adf-be70-a8e8f9293475")
+		(property "Sheetname" "main"
+			(at 93.98 166.9284 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "main.kicad_sch"
+			(at 93.98 191.0846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "rep-trap-pcb"
+				(path "/b363dc8f-4a45-4779-a397-ccb82393dab8"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
 )

@@ -3,8 +3,6 @@ kibot:
   
 global:
    drc_exclusions_workaround: true
-   filters:
-    - number: 58
 
 preflight:
   set_text_variables:
