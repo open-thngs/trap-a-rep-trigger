@@ -14,7 +14,7 @@ preflight:
   run_erc: true
   run_drc: true
   check_zone_fills: true
-  ignore_unconnected: false
+  drc_exclusions_workaround: true
 
 outputs:
   - name: 'Blender 3D Image'
