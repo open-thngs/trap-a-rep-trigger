@@ -3,6 +3,8 @@ kibot:
   
 global:
    drc_exclusions_workaround: true
+   filters:
+    - number: 58
 
 preflight:
   set_text_variables:
@@ -14,7 +16,6 @@ preflight:
   run_erc: true
   run_drc: true
   check_zone_fills: true
-  drc_exclusions_workaround: true
 
 outputs:
   - name: 'Blender 3D Image'
