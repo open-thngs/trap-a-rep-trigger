@@ -67,6 +67,7 @@ class VL53L4CD:
             self._configure_sensor_default_mode()
 
     def _configure_sensor_low_power_mode(self):
+        self._wait_for_boot()
         self.driver.write_config(config.VL53L4CD_ULTRA_LOW_POWER_CONFIG)
         self._start_vhv()
         self.driver.clear_interrupt()
@@ -179,7 +180,7 @@ class VL53L4CD:
             while not self.driver.is_data_ready():
                 time.sleep(0.001)
             
-            self.driver.get_distance()
+            self.get_result()
             self.driver.clear_interrupt()
         self.stop_ranging()
 
@@ -198,9 +199,9 @@ class VL53L4CD:
             while not self.is_data_ready():
                 time.sleep(0.001)
 
-            distance = self.get_distance()
-            heights.append(distance)
-            print("distance: {}mm".format(distance))
+            result = self.get_result()
+            heights.append(result.distance_mm)
+            print("distance: {} mm | ambient: {} | {}".format(result.distance_mm, result.ambient_rate_kcps, result.get_readable_status()))
             self.clear_interrupt()
             
         self.stop_ranging()
@@ -311,8 +312,8 @@ class VL53L4CD:
         result.ambient_rate_kcps = self.driver.get_result_ambient_rate()
         result.sigma_mm = self.driver.get_result_sigma()
         result.distance_mm = self.driver.get_result_distance()
-        result.signal_per_spad_kcps = result.signal_rate_kcps / result.number_of_spad
-        result.ambient_per_spad_kcps = result.ambient_rate_kcps / result.number_of_spad
+        if result.number_of_spad > 0: result.signal_per_spad_kcps = result.signal_rate_kcps / result.number_of_spad
+        if result.number_of_spad > 0: result.ambient_per_spad_kcps = result.ambient_rate_kcps / result.number_of_spad
 
         return result
 
@@ -325,4 +326,34 @@ class Result:
     distance_mm = 0
     signal_per_spad_kcps = 0
     ambient_per_spad_kcps = 0
+
+    def get_readable_status(self):
+        if self.range_status == 0:
+            return "✓ Valid measurement"
+        elif self.range_status == 1:
+            return "/ Warning! Sigma is above the defined threshold"
+        elif self.range_status == 2:
+            return "/ Warning! Signal is below the defined threshold"
+        elif self.range_status == 3:
+            return "✗ Error: Measured distance is below detection threshold"
+        elif self.range_status == 4:
+            return "✗ Error: Phase out of valid limit"
+        elif self.range_status == 5:
+            return "✗ Error: Hardware Fail"
+        elif self.range_status == 6:
+            return "/ Warning: Phase valid but no wrap around check performed"
+        elif self.range_status == 7:
+            return "✗ Error: Wrapped target, phase does not match"
+        elif self.range_status == 8:
+            return "✗ Error: Processing fail"
+        elif self.range_status == 9:
+            return "✗ Error: Crosstalk signal fail"
+        elif self.range_status == 10:
+            return "✗ Error: Interrupt error"
+        elif self.range_status == 11:
+            return "✗ Error: Merged target"
+        elif self.range_status == 12:
+            return "✗ Error: Signal is too low"
+        else:
+            return "✗ Unknown Error"
         
