@@ -14,27 +14,25 @@ import .indicator.color show Color
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="trigger"
 
-main:
+main rgb-led/RGBLED:
   logger.debug "Trigger Camera.."
-  //TODO do not run if the main app is running
 
   exception := catch --trace: 
-    led := IndicatorClient
-    led.open
-    led.set-color Color.pink
+    // led := IndicatorClient
+    // led.open
+    rgb-led.set-color Color.pink
     cam-trigger := CameraTrigger
     cam-trigger.run
     sensor-manager := SensorManager
     sensor-manager.init-all
     sensor-manager.clear-interrupts
-    led.set-color Color.off
+    rgb-led.set-color Color.off
   if exception:
     logger.debug "Error: Ignored trigger"
   
   deep-sleep
 
 class CameraTrigger:
-
   run:
     exception := catch:
       shutter := gpio.Pin 11 --output=true

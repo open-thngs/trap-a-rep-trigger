@@ -45,11 +45,11 @@ main arguments:
   rgb-led := RGBLED
   indicator.set-color-handler :: | color |
     rgb-led.set-color color
-  indicator.install
 
   if esp32.wakeup-cause == esp32.WAKEUP-EXT1:
-    spawn:: trigger.main
+    trigger.main rgb-led
   else:
+    indicator.install
     usb-detect-pin := gpio.Pin.in USB-DETECT-PIN
     if usb-detect-pin.get == 1:
       spawn:: bluetooth.main
