@@ -20,7 +20,7 @@ import .indicator.color show Color
 import .indicator.indicator-service-client show IndicatorClient
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
-command-channel := monitor.Channel 1
+command-channel := monitor.Channel 2
 sensor-manager/SensorManager := ?
 api/ApiClient:=?
 sensor-array := []
@@ -41,17 +41,16 @@ main:
     sensor-manager = SensorManager
     led.set-color Color.yellow
     sensor-manager.calibrate-and-start
+    blink
 
     if is-ble-available: //handle interrupts manually when ble is active
-      Task.group --required=1 [
-        :: handle-interrupt-vl53-1,
-        :: handle-interrupt-vl53-2,
-        :: handle-interrupt-vl53-3,
-        :: handle-interrupt-vl53-4
-      ]
+      led.set-color Color.blue
+      task :: handle-interrupt-vl53-1
+      task :: handle-interrupt-vl53-2
+      task :: handle-interrupt-vl53-3
+      task :: handle-interrupt-vl53-4
 
     set-status State.READY
-    blink
 
     while is-ble-available:
       handle-command
@@ -70,8 +69,11 @@ blink:
 
 handle-command:
   command := command-channel.receive --blocking=true
+  logger.debug "Received command $command"
   if command == Command.TRIGGER:
+    led.set-color Color.pink
     camera-trigger.run
+    led.set-color Color.blue
   else if command == Command.CALIBRATE:
     calibrate
   else if command == Command.XTALK:

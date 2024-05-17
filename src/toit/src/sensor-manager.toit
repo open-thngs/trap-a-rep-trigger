@@ -5,7 +5,7 @@ import system.storage
 import .vl53l4cd
 
 TIME-TO-MEASURE   ::= 50
-MEASURE-FREQUENCY ::= 120
+MEASURE-FREQUENCY ::= 100
 
 VL53_ADDR_1   ::= 20
 VL53_XSHUNT_1 ::= 47
@@ -42,7 +42,7 @@ class SensorManager:
     bus = i2c.Bus
       --sda=sda
       --scl=scl
-      --frequency=300_000
+      --frequency=400_000
     
     debugging := false
     vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53-INT-1 VL53_ADDR_1 --debug=debugging
@@ -101,8 +101,8 @@ class SensorManager:
       apply_sensor_cfg sensor bucket
       threashold-mm := sensor.get-height-trigger-threshold 25 10
       sensor.set-mode MODE-LOW-POWER
-      sensor.set-signal-threshold 8000 
-      sensor.set-sigma-threshold 20
+      sensor.set-signal-threshold 6000 
+      sensor.set-sigma-threshold 10
       sensor.set-measure-timings (TIME-TO-MEASURE + (random 6)) (MEASURE-FREQUENCY + (random 6)) //add a random to the frequency to avoid synchronisation of the sensors
       
       sensor.set-interrupt threashold-mm true
