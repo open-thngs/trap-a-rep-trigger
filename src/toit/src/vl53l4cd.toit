@@ -14,10 +14,11 @@ class VL53L4CD:
   name := ?
   driver_/VL53L4CD-DRIVER? := ?
   xshut-pin_/gpio.Pin? := ?
+  irq-pin-nr := ?
   i2caddr := ?
   is-first-interrupt := true
 
-  constructor .bus_ .name/string xshut_pin/int .i2caddr=41 --debug=false:
+  constructor .bus_ .name/string xshut_pin/int .irq-pin-nr/int .i2caddr=41 --debug=false:
     driver_ = VL53L4CD-DRIVER bus_ i2caddr debug
     xshut-pin_ = gpio.Pin xshut_pin
 
@@ -42,7 +43,7 @@ class VL53L4CD:
   reset:
     disable
     enable
-
+  
   apply-i2c-address:
     driver_.init-default
     driver_.set-i2c-address i2caddr
@@ -172,7 +173,7 @@ class VL53L4CD:
       driver_.clear-interrupt
     driver_.stop-ranging
 
-  get-height-trigger-threshold intensity=25 percentage=10.0 -> int:
+  get-height-trigger-threshold intensity=25 percentage=5.0 -> int:
     set-mode MODE-DEFAULT
     heights := ringbuffer.RingBuffer intensity
     device-heat-loop
@@ -184,15 +185,17 @@ class VL53L4CD:
         sleep --ms=2
       
       result := get-result
-      // while result.distance-mm == 0:
-      //   clear-interrupt
-      //   while not driver_.is-data-ready:
-      //     sleep --ms=2
-      //   result = get-result
+      while result.distance-mm == 0:
+        clear-interrupt
+        while not driver_.is-data-ready:
+          sleep --ms=2
+        result = get-result
+        if result.distance-mm > 0:
+          continue
 
       distance = result.distance-mm.to-float
-      if distance == 0:
-        result.dump
+      // if distance == 0:
+      //   result.dump
       print "Distance: $(%4d distance) mm [$result.get-status-string]" 
       heights.append distance
       clear-interrupt

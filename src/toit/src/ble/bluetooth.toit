@@ -4,6 +4,8 @@ import ble show BLE_CONNECT_MODE_UNDIRECTIONAL
 import monitor show Channel
 import reader
 import gpio
+import system
+import esp32
 
 import .api_service_provider show ApiServiceProvider
 import ..indicator.color show Color
@@ -175,6 +177,7 @@ usb-c-watcher-task:
   ble-pin.wait-for 0
   command-channel.send Command.STOP
   provider.stop
+  esp32.deep-sleep (Duration 0)
 
 name -> string:
   return "BLE"

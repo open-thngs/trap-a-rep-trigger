@@ -9,7 +9,6 @@ import .vl53l4cd
 import .sensor-manager show SensorManager
 import .sensor-manager show PIN-MASK
 import .utils show deep-sleep
-import .indicator.indicator-service-client show IndicatorClient
 import .indicator.color show Color
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="trigger"
@@ -18,8 +17,6 @@ main rgb-led/RGBLED:
   logger.debug "Trigger Camera.."
 
   exception := catch --trace: 
-    // led := IndicatorClient
-    // led.open
     rgb-led.set-color Color.pink
     cam-trigger := CameraTrigger
     cam-trigger.run
@@ -33,6 +30,7 @@ main rgb-led/RGBLED:
   deep-sleep
 
 class CameraTrigger:
+  
   run:
     exception := catch:
       shutter := gpio.Pin 11 --output=true

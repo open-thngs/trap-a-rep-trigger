@@ -4,8 +4,8 @@ import system.storage
 
 import .vl53l4cd
 
-TIME-TO-MEASURE   ::= 40
-MEASURE-FREQUENCY ::= 80
+TIME-TO-MEASURE   ::= 50
+MEASURE-FREQUENCY ::= 120
 
 VL53_ADDR_1   ::= 20
 VL53_XSHUNT_1 ::= 47
@@ -45,10 +45,10 @@ class SensorManager:
       --frequency=300_000
     
     debugging := false
-    vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53_ADDR_1 --debug=debugging
-    vl53-2 := VL53L4CD bus "VL53_2" VL53_XSHUNT_2 VL53_ADDR_2 --debug=debugging
-    vl53-3 := VL53L4CD bus "VL53_3" VL53_XSHUNT_3 VL53_ADDR_3 --debug=debugging
-    vl53-4 := VL53L4CD bus "VL53_4" VL53_XSHUNT_4 VL53_ADDR_4 --debug=debugging
+    vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53-INT-1 VL53_ADDR_1 --debug=debugging
+    vl53-2 := VL53L4CD bus "VL53_2" VL53_XSHUNT_2 VL53-INT-2 VL53_ADDR_2 --debug=debugging
+    vl53-3 := VL53L4CD bus "VL53_3" VL53_XSHUNT_3 VL53-INT-3 VL53_ADDR_3 --debug=debugging
+    vl53-4 := VL53L4CD bus "VL53_4" VL53_XSHUNT_4 VL53-INT-4 VL53_ADDR_4 --debug=debugging
     sensor-array[vl53-1.name] = vl53_1
     sensor-array[vl53-2.name] = vl53_2
     sensor-array[vl53-3.name] = vl53_3
@@ -101,16 +101,13 @@ class SensorManager:
       apply_sensor_cfg sensor bucket
       threashold-mm := sensor.get-height-trigger-threshold 25 10
       sensor.set-mode MODE-LOW-POWER
-      sensor.set-signal-threshold 5000
-      sensor.set-sigma-threshold 10
-      // sensor.set-inter-measurement-ms-lp 100
-      // sensor.set-macro-timing-lp 1
+      sensor.set-signal-threshold 8000 
+      sensor.set-sigma-threshold 20
       sensor.set-measure-timings (TIME-TO-MEASURE + (random 6)) (MEASURE-FREQUENCY + (random 6)) //add a random to the frequency to avoid synchronisation of the sensors
       
       sensor.set-interrupt threashold-mm true
       sensor.clear-interrupt
       sensor.start-ranging
-      // sleep --ms=(random 900 1000)
 
   apply-sensor-cfg sensor bucket:
     e1 := catch:
@@ -128,7 +125,5 @@ class SensorManager:
 
   clear-interrupts:
     sensor-array.values.do: |sensor|
-      result/Result := sensor.get-result
-      print "[$sensor.name]: Distance: $(%4d result.distance-mm) mm [$result.get-status-string]" 
       print "Clearing interrupt for $sensor.name"
       sensor.clear-interrupt

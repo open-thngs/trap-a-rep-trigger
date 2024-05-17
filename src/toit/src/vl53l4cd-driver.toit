@@ -123,11 +123,11 @@ class VL53L4CD-DRIVER:
 
   set-timing-budget timing-budget-ms:
     if not 10 <= timing-budget-ms <= 200:
-        throw "Timing budget range duration must be 10ms to 200ms."
+      throw "Timing budget range duration must be 10ms to 200ms."
 
     inter-measurment := get-inter-measurement
     if inter-measurment != 0 and timing-budget-ms > inter-measurment:
-        throw "Timing budget can not be greater than inter-measurement period ($inter-measurment)"
+      throw "Timing budget can not be greater than inter-measurement period ($inter-measurment)"
 
     osc-freq := get-osc-frequency
     if osc_freq == 0:
@@ -269,7 +269,7 @@ class VL53L4CD-DRIVER:
   write_ register/ByteArray data/ByteArray:
     // logger.info ">>WRITE addr: [$i2c-address_] reg: [$register] data: [$data]"
     device_.write-address register data
-    sleep --ms=3
+    // sleep --ms=5
 
   set-macro-timing-lp macro_timing/int:
     if macro_timing < 1 or macro_timing > 255:
