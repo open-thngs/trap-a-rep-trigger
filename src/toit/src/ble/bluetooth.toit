@@ -6,6 +6,7 @@ import reader
 import gpio
 import system
 import esp32
+import system.storage show Bucket
 
 import .api_service_provider show ApiServiceProvider
 import ..indicator.color show Color
@@ -19,6 +20,12 @@ FIRMWARE-CHARAC-UUID      ::= BleUuid "7019"
 CRC32-CHARAC-UUID         ::= BleUuid "701A" 
 FILELENGTH-CHARAC-UUID    ::= BleUuid "701B"
 STATE-CHARAC-UUID         ::= BleUuid "701C"
+CFG-CHARAC-UUID           ::= BleUuid "701D"
+
+CFG-SIGNAL-THRESHOLD     ::= 0xA0
+CFG-SIGMA-THRESHOLD      ::= 0xA1
+CFG-TIME-TO-MEASURE      ::= 0xA2
+CFG-MEASURE-INTERVAL     ::= 0xA3
 
 logger/log.Logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="ble"
 
@@ -28,20 +35,22 @@ firmware-charac/LocalCharacteristic? := null
 crc32-charac/LocalCharacteristic? := null
 file-length-charac/LocalCharacteristic? := null
 state-charac/LocalCharacteristic? := null
+cfg-charac/LocalCharacteristic? := null
 
 state-channel/Channel := ?
-payload-handler/Channel := ?
 command-channel/Channel := ?
 
 crc32 := null
 file-length/int := 0
 
 provider/ApiServiceProvider := ?
+bucket/Bucket := ?
 
 main :
   state-channel = Channel 1
-  payload-handler = Channel 1
   command-channel = Channel 1
+
+  bucket = Bucket.open --flash "sensor-cfg"
 
   provider = ApiServiceProvider
   on-device-status-change := :: | payload/ByteArray |
@@ -67,8 +76,8 @@ main :
       :: file-length-task,
       :: command-receiver-task,
       :: state-task,
-      :: ble-handler-task,
       :: usb-c-watcher-task,
+      :: cfg-task,
     ]
 
     led.set-color Color.blue
@@ -76,8 +85,6 @@ main :
     while running:
       command := command-channel.receive --blocking=true
       if command == Command.STOP:
-        // receiver-task.cancel
-        // logger.debug "receiver-task stopped"
         peripheral.stop-advertise
         logger.debug "Advertising stopped"
         provider.uninstall
@@ -86,17 +93,6 @@ main :
     logger.debug "BLE Service stopped"
   finally:
     peripheral.stop-advertise
-
-ble-handler-task:
-  while true:
-    payload/Payload := payload-handler.receive
-    logger.info "Received payload: $payload.to-string"
-    if payload.type == Payload.TYPE-CRC32:
-      crc32 = payload.data
-      logger.info "Received CRC32"
-    else if payload.type == Payload.TYPE-FILE-LENGTH:
-      file-length = int.parse payload.data.to-string
-      logger.info "Received File Length: $file-length"
 
 run-ble-service device-name:
   adapter := Adapter 
@@ -108,6 +104,7 @@ run-ble-service device-name:
   crc32-charac = service.add-write-only-characteristic CRC32-CHARAC-UUID
   file-length-charac = service.add-write-only-characteristic FILELENGTH-CHARAC-UUID
   state-charac = service.add-notification-characteristic STATE-CHARAC-UUID
+  cfg-charac = service.add-write-only-characteristic CFG-CHARAC-UUID
 
   service.deploy
   peripheral.start-advertise --connection_mode=BLE_CONNECT_MODE_UNDIRECTIONAL
@@ -144,6 +141,9 @@ command-receiver-task:
     else if payload == Command.XTALK:
       logger.debug "Xtalk command received"
       provider.calibrate-xtalk
+    else if payload == Command.RESET:
+      logger.debug "Reset command received"
+      esp32.deep-sleep (Duration 0)
     else if payload == Command.FIRMWARE-UPDATE:
       logger.debug "Firmware update command received"
       if not crc32:
@@ -162,12 +162,14 @@ command-receiver-task:
 file-length-task:
   while true:
     payload := Payload Payload.TYPE-FILE-LENGTH file-length-charac.read
-    payload-handler.send payload
+    file-length = int.parse payload.data.to-string
+    logger.info "Received File Length: $file-length"
 
 crc32-task:
   while true:
     payload := Payload Payload.TYPE-CRC32 crc32-charac.read
-    payload-handler.send payload
+    crc32 = payload.data
+    logger.info "Received CRC32"
 
 set-state state/string:
   state-channel.send state.to-byte-array
@@ -178,6 +180,40 @@ usb-c-watcher-task:
   command-channel.send Command.STOP
   provider.stop
   esp32.deep-sleep (Duration 0)
+
+cfg-task:
+  while true:
+    payload := cfg-charac.read
+    if not payload.size == 3:
+      logger.debug "Invalid config received: $payload"
+      continue
+
+    type := payload[0]
+    value := (payload[1] << 8) | payload[2]
+    logger.debug "Received config: $payload"
+    if type == CFG-SIGNAL-THRESHOLD:
+      if value < 1 and value > 16384:
+        logger.debug "Invalid Signal Threshold Config received: $value"
+        continue
+      logger.debug "Signal Threshold Config received: $value"
+      bucket["signal-threshold"] = value
+    else if type == CFG-SIGMA-THRESHOLD:
+      if value > 16383:
+        logger.debug "Invalid Sigma Threshold Config received: $value"
+        continue
+      logger.debug "Sigma Threshold Config received: $value"
+      bucket["sigma-threshold"] = value
+    else if type == CFG-TIME-TO-MEASURE:
+      logger.debug "Time-To-Measure Config received: $value"
+      bucket["time-to-measure"] = value
+    else if type == CFG-MEASURE-INTERVAL:
+      if value > 200:
+        logger.debug "Invalid Measure interval Config received: $value"
+        continue
+      logger.debug "Measure interval Config received: $value"
+      bucket["measure-interval"] = value
+    else:
+      logger.debug "Unknown config received: $payload"
 
 name -> string:
   return "BLE"
@@ -223,6 +259,7 @@ class Command:
   static STOP             ::= #[0x02]
   static XTALK            ::= #[0x03]
   static FIRMWARE-UPDATE  ::= #[0x04]
+  static RESET            ::= #[0x05]
 
 class State:
   static READY        ::= #[0x00]
