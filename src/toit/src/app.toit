@@ -20,7 +20,7 @@ import .indicator.color show Color
 import .indicator.indicator-service-client show IndicatorClient
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
-command-channel := monitor.Channel 1
+command-channel := monitor.Channel 2
 sensor-manager/SensorManager := ?
 api/ApiClient:=?
 sensor-array := []
@@ -28,6 +28,10 @@ led/IndicatorClient := ?
 is-ble-available := false
 camera-trigger := CameraTrigger
 bucket/Bucket := ?
+irq-task-1/Task := ?
+irq-task-2/Task := ?
+irq-task-3/Task := ?
+irq-task-4/Task := ?
 
 main:
   logger.debug "Starting VL53L4CD Sensor Array"
@@ -48,10 +52,10 @@ main:
 
     if is-ble-available: //handle interrupts manually when ble is active
       led.set-color Color.blue
-      task :: handle-interrupt-vl53-1
-      task :: handle-interrupt-vl53-2
-      task :: handle-interrupt-vl53-3
-      task :: handle-interrupt-vl53-4
+      irq-task-1 = task :: handle-interrupt-vl53-1
+      irq-task-2 = task :: handle-interrupt-vl53-2
+      irq-task-3 = task :: handle-interrupt-vl53-3
+      irq-task-4 = task :: handle-interrupt-vl53-4
 
     set-status State.READY
 
@@ -80,11 +84,19 @@ handle-command:
   else if command == Command.CALIBRATE:
     calibrate
   else if command == Command.XTALK:
+    cancel-irq-tasks
     calibrator.calibrate-xtalk sensor-manager led
   else if command == Command.STOP:
+    cancel-irq-tasks
     is-ble-available = false
   else:
     print "Unknown Command"
+
+cancel-irq-tasks:
+  irq-task-1.cancel
+  irq-task-2.cancel
+  irq-task-3.cancel
+  irq-task-4.cancel
 
 init-ble-api -> bool:
   logger.debug "Initializing BLE API"
@@ -143,8 +155,4 @@ handle-interrupt sensor irq-pin-nr:
       print "Interrupt $sensor.name"
       sensor.clear-interrupt
       success := command-channel.try-send Command.TRIGGER
-      if success:
-        print "Sent Trigger Command"
-      else:
-        print "Trigger Command ignored"
       irq-pin.wait-for 1
