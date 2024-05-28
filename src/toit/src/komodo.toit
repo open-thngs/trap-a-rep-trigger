@@ -35,9 +35,10 @@ firmware-is-upgrade-pending / bool := false
 reg-led := ?
 
 main arguments:
+  cause := esp32.wakeup-cause
   status := esp32.ext1-wakeup-status PIN-MASK
   pins := extract-pins status
-  logger.info "Starting RepTrap... reason [$status] Pins[$pins]"
+  logger.info "Starting RepTrap... cause: [$cause] status [$status] Pins[$pins]"
   
   device := Device.parse arguments
 
@@ -51,7 +52,7 @@ main arguments:
   else:
     indicator.install
     usb-detect-pin := gpio.Pin.in USB-DETECT-PIN
-    if usb-detect-pin.get == 1:
+    if usb-detect-pin.get == 1 and cause == 0: //only start BLE if wakeup cause was a reset and not from deepsleep
       spawn:: bluetooth.main
     usb-detect-pin.close
 
