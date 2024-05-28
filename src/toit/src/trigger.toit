@@ -2,6 +2,7 @@ import gpio
 import log
 import esp32
 import i2c
+import system.storage show Bucket
 // import artemis
 
 import .rgb-led show RGBLED
@@ -20,7 +21,8 @@ main rgb-led/RGBLED:
     rgb-led.set-color Color.pink
     cam-trigger := CameraTrigger
     cam-trigger.run
-    sensor-manager := SensorManager
+    bucket := Bucket.open --flash "sensor-cfg"
+    sensor-manager := SensorManager bucket
     sensor-manager.init-all
     sensor-manager.clear-interrupts
     rgb-led.set-color Color.off

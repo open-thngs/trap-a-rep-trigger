@@ -1,10 +1,10 @@
 import i2c
 import gpio
-import system.storage
+import system.storage show Bucket
 
 import .vl53l4cd
 
-TIME-TO-MEASURE   ::= 50
+TIME-TO-MEASURE   ::= 60
 MEASURE-FREQUENCY ::= 100
 SIGNAL-TRESHOLD  ::= 5000
 SIGMA-TRESHOLD   ::= 10
@@ -41,9 +41,7 @@ class SensorManager:
   measure-frequency := MEASURE-FREQUENCY
   time-to-measure := TIME-TO-MEASURE
 
-  constructor:  
-    bucket = storage.Bucket.open --flash "sensor-cfg"
-
+  constructor .bucket/Bucket:  
     sda = gpio.Pin 38
     scl = gpio.Pin 48
     bus = i2c.Bus
@@ -51,8 +49,6 @@ class SensorManager:
       --scl=scl
       --frequency=400_000
     
-    get-sensor-cfg
-
     debugging := false
     vl53-1 := VL53L4CD bus "VL53_1" VL53_XSHUNT_1 VL53-INT-1 VL53_ADDR_1 --debug=debugging
     vl53-2 := VL53L4CD bus "VL53_2" VL53_XSHUNT_2 VL53-INT-2 VL53_ADDR_2 --debug=debugging
@@ -90,24 +86,30 @@ class SensorManager:
 
   calibrate-and-start:
     disable-all
+    
+    signal-threshold = read-sensor-cfg "signal-threshold" SIGNAL-TRESHOLD
+    sigma-threshold = read-sensor-cfg "sigma-threshold" SIGMA-TRESHOLD
+    measure-frequency = read-sensor-cfg "measure-frequency" MEASURE-FREQUENCY
+    time-to-measure = read-sensor-cfg "time-to-measure" TIME-TO-MEASURE
+
     sensor-array.values.do: |sensor/VL53L4CD|
       print "---------- $sensor.name ------------"
       sensor.enable
       sensor.apply-i2c-address
       sensor.set-mode MODE-DEFAULT
       sensor.start-temperature-update
-      apply_sensor_cfg sensor bucket
+      apply_sensor_cfg sensor
       threashold-mm := sensor.get-height-trigger-threshold 25 8
       sensor.set-mode MODE-LOW-POWER
       sensor.set-signal-threshold signal-threshold 
       sensor.set-sigma-threshold sigma-threshold
-      sensor.set-measure-timings time-to-measure measure-frequency //add a random to the frequency to avoid synchronisation of the sensors
+      sensor.set-measure-timings (time-to-measure + (random 6)) (measure-frequency + (random 6)) //add a random to the frequency to avoid synchronisation of the sensors
       
       sensor.set-interrupt threashold-mm true
       sensor.clear-interrupt
       sensor.start-ranging
 
-  apply-sensor-cfg sensor bucket:
+  apply-sensor-cfg sensor:
     e1 := catch:
       offset := bucket[sensor.name+"-offset"]
       print "Setting offset for $sensor.name to $offset"
@@ -126,12 +128,6 @@ class SensorManager:
       print "Clearing interrupt for $sensor.name"
       sensor.clear-interrupt
 
-  get-sensor-cfg:
-    signal-threshold = read-sensor-cfg "signal-threshold" SIGNAL-TRESHOLD
-    sigma-threshold = read-sensor-cfg "sigma-threshold" SIGMA-TRESHOLD
-    measure-frequency = read-sensor-cfg "measure-frequency" MEASURE-FREQUENCY
-    time-to-measure = read-sensor-cfg "time-to-measure" TIME-TO-MEASURE
-  
   read-sensor-cfg key default:
     value := 0
     exc := catch:

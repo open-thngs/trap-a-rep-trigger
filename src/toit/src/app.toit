@@ -1,9 +1,9 @@
 import gpio
 import i2c
-import system.storage
 import esp32
 import log
 import monitor
+import system.storage show Bucket
 
 import .vl53l4cd
 import .rgb-led show RGBLED
@@ -20,13 +20,14 @@ import .indicator.color show Color
 import .indicator.indicator-service-client show IndicatorClient
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
-command-channel := monitor.Channel 2
+command-channel := monitor.Channel 1
 sensor-manager/SensorManager := ?
 api/ApiClient:=?
 sensor-array := []
 led/IndicatorClient := ?
 is-ble-available := false
 camera-trigger := CameraTrigger
+bucket/Bucket := ?
 
 main:
   logger.debug "Starting VL53L4CD Sensor Array"
@@ -36,9 +37,11 @@ main:
     led.open
     led.set-color Color.green
 
+    bucket = Bucket.open --flash "sensor-cfg"
+
     is-ble-available = init-ble-api
 
-    sensor-manager = SensorManager
+    sensor-manager = SensorManager bucket
     led.set-color Color.yellow
     sensor-manager.calibrate-and-start
     blink
@@ -139,5 +142,9 @@ handle-interrupt sensor irq-pin-nr:
       irq-pin.wait-for 0
       print "Interrupt $sensor.name"
       sensor.clear-interrupt
-      command-channel.send Command.TRIGGER
+      success := command-channel.try-send Command.TRIGGER
+      if success:
+        print "Sent Trigger Command"
+      else:
+        print "Trigger Command ignored"
       irq-pin.wait-for 1
