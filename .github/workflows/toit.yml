@@ -48,6 +48,11 @@ jobs:
 
       - name: Create VERSION file
         run: echo "${{ github.ref }}" > VERSION
+      - name: Upload envelope
+        uses: actions/upload-artifact@v2
+        with:
+          name: VERSION
+          path: VERSION
 
       - name: Upload VERSION file
         id: upload-version-file
