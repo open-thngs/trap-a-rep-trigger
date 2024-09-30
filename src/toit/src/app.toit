@@ -20,7 +20,7 @@ import .indicator.color show Color
 import .indicator.indicator-service-client show IndicatorClient
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="app"
-command-channel := monitor.Channel 2
+command-channel := monitor.Channel 1
 sensor-manager/SensorManager := ?
 api/ApiClient:=?
 sensor-array := []

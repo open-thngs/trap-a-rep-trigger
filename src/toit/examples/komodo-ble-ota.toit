@@ -2,6 +2,9 @@ import ble show *
 import log
 import system.firmware as firmware
 import system.firmware show FirmwareMapping
+import http
+import net
+import certificate-roots
 
 logger ::= log.Logger log.DEBUG_LEVEL log.DefaultTarget --name="ble"
 
@@ -43,6 +46,19 @@ main:
     else if characteristic.uuid == COMMAND-CHARAC-UUID:
       command-charac = characteristic
 
+  URL := "github.com"
+  PATH := "/open-thngs/trap-a-rep-trigger/releases/latest/download/heimdall-esp32s3.bin"
+  certificate-roots.install-all-trusted-roots
+
+  network := net.open
+  client := http.Client.tls network
+
+  request := client.get URL PATH
+  file-reader := request.body
+  
+  while chunk := (file-reader.read --max-size=512) != null:
+    logger.debug "Read chunk of size $chunk.size"
+
   firmware.map:  | firmware-mapping/FirmwareMapping |
     firmware-length := firmware-mapping.size
     packet-count := firmware-length / PAKET-SIZE
@@ -63,8 +79,6 @@ main:
     packet/int := 0
     last := null
     List.chunk-up 0 firmware-mapping.size PAKET-SIZE: | chunk-from/int chunk-to/int chunk-size/int |
-      // if send-bytes % 4096 == 0:
-      //   sleep --ms=50
       while true: //retry on error
         exception := catch:
           bytes := ByteArray chunk-size
@@ -79,7 +93,6 @@ main:
           break
         if exception:
           if exception.contains "error code: 0x06":
-            // logger.error "ENOMEM: reached memory limit, retry"
             //ignore and retry
           if exception.contains "error code: 0x07":
             logger.error "ENOCON: connection lost"
