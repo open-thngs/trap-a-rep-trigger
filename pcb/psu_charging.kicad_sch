@@ -7640,7 +7640,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1042"
+		(property "Value" "BH-18650-B1BA002"
 			(at 139.7 93.4085 0)
 			(effects
 				(font
