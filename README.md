@@ -1,7 +1,28 @@
-# Rep Trap 
+# Openthing 2 - RepTrap 
 
-The Rep Trap idea is a hardware system designed to overcome the limitations and challenges of conventional trapping methods. Inspired by PIR sensors commonly used in wildlife cameras, the hardware system features a gate-like sensor arrangement, specifically designed for animals to pass through. Positioned with its sensor element facing downwards, the system incorporates a distance measurement unit within the sensor. This unit continuously measures the height below the sensor, detecting any changes in height.
+The RepTrap is a "motion detector" and camera trigger designed to detect small and/or cold-blooded animals such as frogs, lizards, birds, and other wildlife. It doesn't detect motion directly but instead identifies changes in height within the range of its four Time-of-Flight (ToF) sensors. Any height change within this range triggers a connected camera's shutter.
 
-![rep-trap-pcb-3D_blender_30deg](https://github.com/open-thngs/trap-a-rep-trigger/assets/1415713/9c88f809-4b2b-452e-a898-5deda9819f62)
-![rep-trap-pcb-3D_blender_top](https://github.com/open-thngs/trap-a-rep-trigger/assets/1415713/5fd9419d-a3f0-4ae2-8ee5-6e31db8dc7e9)
-![rep-trap-pcb-3D_blender_bottom](https://github.com/open-thngs/trap-a-rep-trigger/assets/1415713/0d7e8466-224f-44df-9ad4-e85fe32772ca)
+![](https://github.com/open-thngs/trap-a-rep-trigger/img/reptrap_06.jpg)
+
+
+## BLE 
+
+The device and software is Bluetooth ready but it is currently missing an App. Here are commands which can be send to configure and change the device:
+
+- Bluetooth Service [`0xC532`]
+    - **Status** Characteristic [`0xC541`]
+      **Description**: Refelcts the current device status as a string
+      **Values**: `running` `calibrating`
+    - **Command** Characteristic [`0xC540`]
+      **Description**: Accepts specific device commands
+      **Values:**
+      - `stop`: Stops the BLE Service on the device
+      - `calibrate`: Triggers a re-calibration of the device
+      - `xtalk`: Triggers an cross-talk and offset calibration of the device (only needed for manufacturing, should not be used)
+      - `trigger`: Triggers the camera shutter and focus signal
+
+
+![](https://github.com/open-thngs/trap-a-rep-trigger/img/_DSC0569_small.jpg)
+![](https://github.com/open-thngs/trap-a-rep-trigger/img/_DSC0587_small.jpg)
+![](https://github.com/open-thngs/trap-a-rep-trigger/img/_DSC0599_small.jpg)
+![](https://github.com/open-thngs/trap-a-rep-trigger/img/_DSC0632_small.jpg)
